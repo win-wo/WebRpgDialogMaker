@@ -1,0 +1,12 @@
+@import "global/colors.scss";
+
+body{
+    color:$color-text;
+    background-color: $color-primary-0;
+    
+    h2{
+        display:block;
+        background-color: $color-primary-1;
+        padding:20px;
+    }
+}

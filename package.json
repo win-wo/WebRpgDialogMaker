@@ -18,6 +18,9 @@
   "homepage": "https://github.com/win-wo/WebRpgDialogMaker",
   "dependencies": {
     "ejs": "^2.4.1",
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-sass": "^2.2.0",
   }
 }
