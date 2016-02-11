@@ -1,0 +1,23 @@
+{
+  "name": "WebRpgDialogMaker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/win-wo/WebRpgDialogMaker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/win-wo/WebRpgDialogMaker/issues"
+  },
+  "homepage": "https://github.com/win-wo/WebRpgDialogMaker",
+  "dependencies": {
+    "ejs": "^2.4.1",
+    "express": "^4.13.4"
+  }
+}
