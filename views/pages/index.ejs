@@ -2,23 +2,83 @@
 <html lang="en">
 
 <head>
-	<% include ../partials/css %>
+    <% include ../partials/css %>
 </head>
 
-<body ng-app="WebRpgDialogMaker" >
-	<header>
-        <title>WebRpgDialogMaker</title>
-	</header>
-	<main ng-controller="mainController as main"  class="container" ng-hide>
+<body ng-app="WebRpgDialogMaker" ng-controller="mainController as main">
+    <header>
+        <title>{{main.appName}}</title>
+    </header>
+    <main class="container" ng-hide>
         <div class="row">
-            <div class="col s12">                
+            <div class="col-sm-12">
                 <h1>Welcome to {{main.appName}}</h1>
             </div>
         </div>
-	</main>
-	<footer>
-	</footer>
-	<% include ../partials/js %>
+        <div ng-controller="dialoController as dialo"></div>
+        <section id="tools">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>Tools</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <textarea class="form-control" ng-model="dialo.data"></textarea>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-default" ng-click="dialog.loadData()">Load</button>
+                            <button class="btn btn-default" ng-click="dialog.refreshData()">Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="dialogs">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>Dialogs</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class="btn btn-default">New</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-responsive">
+                        <tr>
+                            <th>Key</th>
+                            <th>Controls</th>
+                        </tr>
+                        <tr>
+                            <td>dialog-1</td>
+                            <td>
+                                <button class="btn btn-default">Select</button>
+                                <button class="btn btn-danger">Delete</button>
+                                <button class="btn btn-default">Run</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <section id="demo">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>Demo</h2>
+                </div>  
+            </div>
+        </section>
+    </main>
+    <footer>
+    </footer>
+    <% include ../partials/js %>
 </body>
 
 </html>
