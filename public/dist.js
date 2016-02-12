@@ -111,6 +111,49 @@ app.config(['$routeProvider',
     }
 })();
 (function () {
+    app.controller("ManagePageController", ManagePageController);
+
+    function ManagePageController() {
+        var vm = this;
+        vm.file = null;
+
+        vm.importData = function () {
+            var element = angular.element("#manage-page-file-import")[0];
+            var file = element.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                loadDataAsChapter(reader.result);
+            };
+
+            reader.readAsText(file);
+        }
+
+        vm.exportData = function () {
+            var data = localStorage.chapter;
+            var url = 'data:text/json;charset=utf8,' + encodeURIComponent(data);
+            window.open(url, '_blank');
+            window.focus();
+        }
+
+        function loadDataAsChapter(data) {
+            try {
+                var parsedData = JSON.parse(data);
+
+                if (!parsedData.id) throw new Error("Missing id");
+                if (!parsedData.name) throw new Error("Missing name");
+                if (!parsedData.number) throw new Error("Missing number");
+                if (!parsedData.language) throw new Error("Missing language");
+                if (!parsedData.dialogs) throw new Error("Missing dialogs");
+
+                localStorage.chapter = data;
+            } catch (error) {
+                console.error("Data is not readable or invalid : " + error.message);
+            }
+        }
+    }
+})();
+(function () {
     app.factory("DialogModel", function () { return DialogModel })
 
     function DialogModel() {
@@ -118,20 +161,5 @@ app.config(['$routeProvider',
         this.name = null;
         this.number = null;
         this.language = null;
-    }
-})();
-(function () {
-    app.controller("ManagePageController", ManagePageController);
-
-    function ManagePageController() {
-        var vm = this;
-        
-        vm.importData = function(){
-            
-        }
-        
-        vm.exportData = function(){
-            
-        }
     }
 })();
