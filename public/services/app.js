@@ -13,7 +13,7 @@ app.config(['$routeProvider',
         controller: 'EditPageController',
         controllerAs : 'EditPage'
       }).
-      when('/demo', {
+      when('/demo/:dialogId', {
         templateUrl: 'public/services/demo/index.html',
         controller: 'DemoPageController',
         controllerAs : 'DemoPage'

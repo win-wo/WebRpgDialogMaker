@@ -18,6 +18,7 @@ gulp.task('javascript', function () {
     gulp.src(['public/services/app.js', 'public/services/**/*.js'])
         .pipe(sourcemaps.init())
         .pipe(concat('dist.js'))
+        .pipe(gulp.dest('public'))
         .pipe(rename('dist.min.js'))
         .pipe(uglify())
         .pipe(sourcemaps.write('./'))

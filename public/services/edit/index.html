@@ -1,35 +1,64 @@
 <div class="row">
     <div class="col-sm-12">
         <h2>Edit</h2>
+        <small>
+            This page saves your information automaticly. 
+            You just need to <a href="#/manage">export it</a> before closing this window. 
+        </small>
     </div>
 </div>
+<h3>Chapter</h3>
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-3">
         <div class="form-group">
-            Chapter name :
-            <input type="text" class="form-control" ng-model="chaptr.chapter.name">
+            Name :
+            <input type="text" class="form-control" ng-model="EditPage.chapter.name">
         </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-3">
         <div class="form-group">
-            Chapter id :
-            <input type="text" class="form-control" readonly ng-model="chaptr.chapter.id">
+            Number :
+            <input type="number" class="form-control" ng-model="EditPage.chapter.number">
         </div>
     </div>
-    <div class="col-sm-12">
+    <div class="col-sm-3">
         <div class="form-group">
-            Language :
-            <input type="text" class="form-control" ng-model="chaptr.chapter.language">
+            Language (e.g. en,fr) :
+            <input type="text" class="form-control" ng-model="EditPage.chapter.language">
         </div>
     </div>
 </div>
 <hr>
 <h3>Dialogs</h3>
 <div class="row">
+    <div class="col-sm-3">
+        <div class="form-group">
+            Name :
+            <input type="text" class="form-control" ng-model="EditPage.newDialog.name">
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            Number :
+            <input type="number" class="form-control" ng-model="EditPage.newDialog.number">
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            Language (e.g. en,fr) :
+            <input type="text" class="form-control" ng-model="EditPage.newDialog.language">
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-sm-12">
         <div class="form-group">
-            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newDialogModal">
+            <button type="button" class="btn btn-default" ng-hide="EditPage.newDialog.id" ng-click="EditPage.addNewDialog()">
                 New
+            </button>
+            <button type="button" class="btn btn-default" ng-show="EditPage.newDialog.id" ng-click="EditPage.saveDialog()">
+                Save
             </button>
         </div>
     </div>
@@ -41,32 +70,19 @@
                 <th>Key</th>
                 <th>Controls</th>
             </tr>
-            <tr>
-                <td>dialog-1</td>
+            <tr ng-repeat="dialog in EditPage.chapter.dialogs">
+                <td>{{dialog.number}} - {{dialog.name}}</td>
                 <td>
-                    <button class="btn btn-default">Select</button>
-                    <button class="btn btn-danger">Delete</button>
-                    <button class="btn btn-default">Run</button>
+                    <button class="btn btn-default" ng-click="EditPage.selectDialog(dialog)">Select</button>
+                    <button class="btn btn-danger" ng-click="EditPage.deleteDialog(dialog)">Delete</button>
+                    <button class="btn btn-default" ng-click="EditPage.runDialog(dialog)">Run</button>
                 </td>
             </tr>
         </table>
     </div>
 </div>
-
-<div class="modal fade" id="newDialogModal" tabindex="-1" role="dialog" aria-labelledby="newDialogModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="newDialogModalLabel">New Dialog</h4>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
+<div class="row">
+    <div class="col-sm-12">
+        <button class="btn btn-primary" ng-click="EditPage.saveToStorage()">Save</button>
     </div>
 </div>
