@@ -24,6 +24,16 @@
                 </ul>
             </div>
             <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-12" >
+                        <div ng-repeat="notification in App.notifications" class="alert alert-{{notification.type}}" role="alert" >
+                            {{notification.text}}
+                            <div class="pull-right">
+                                <button ng-click="removeNotification($index)">X</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div ng-view></div>
             </div>
         </div>
