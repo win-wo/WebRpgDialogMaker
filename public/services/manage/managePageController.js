@@ -5,7 +5,7 @@
         var vm = this;
         vm.file = null;
         vm.exportedData = null;
-        
+
         vm.importData = function () {
             var element = angular.element("#manage-page-file-import")[0];
             var file = element.files[0];
@@ -19,23 +19,34 @@
         }
 
         vm.exportData = function () {
-            vm.exportedData = encodeURIComponent(JSON.stringify(localStorage.chapter));
+            try {
+                if (localStorage.chapter) {
+                    vm.exportedData = encodeURIComponent(JSON.stringify(localStorage.chapter));
+                }
+            } catch (error) {
+                console.error("No chapter to export : " + error.message);
+            }
         }
 
         function loadDataAsChapter(data) {
             try {
-                var parsedData = JSON.parse(data);
+                var chapter = JSON.parse(data);
 
-                if (!parsedData.id) throw new Error("Missing id");
-                if (!parsedData.name) throw new Error("Missing name");
-                if (!parsedData.number) throw new Error("Missing number");
-                if (!parsedData.language) throw new Error("Missing language");
-                if (!parsedData.dialogs) throw new Error("Missing dialogs");
+                isChapterValid(chapter);
 
                 localStorage.chapter = data;
             } catch (error) {
                 console.error("Data is not readable or invalid : " + error.message);
             }
+        }
+
+        function isChapterValid(chapter) {
+            if (!chapter) throw new Error("Chapter is null");
+            if (!chapter.id) throw new Error("Missing id");
+            if (!chapter.name) throw new Error("Missing name");
+            if (!chapter.number) throw new Error("Missing number");
+            if (!chapter.language) throw new Error("Missing language");
+            if (!chapter.dialogs) throw new Error("Missing dialogs");
         }
     }
 })();
