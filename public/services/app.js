@@ -1,5 +1,5 @@
 app = angular.module("WebRpgDialogMaker", ["ngRoute"]);
-
+app.Data = {};
 app.config(['$compileProvider', function ($compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|data):/);
 }]);
@@ -30,8 +30,15 @@ app.config(['$routeProvider',
 (function () {
     app.controller("AppController", AppController);
 
-    function AppController() {
+    AppController.$inject = ["NofiticationRepository"];    
+    function AppController(nofiticationRepository) {
         var vm = this;
         vm.appName = "Project Chaptr";
+        debugger;
+        vm.notifications = nofiticationRepository.notifications;
+        
+        vm.removeNotification = function(index){
+            nofiticationRepository.remove(index);
+        }
     }
 })();

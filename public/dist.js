@@ -1,5 +1,5 @@
 app = angular.module("WebRpgDialogMaker", ["ngRoute"]);
-
+app.Data = {};
 app.config(['$compileProvider', function ($compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|data):/);
 }]);
@@ -30,10 +30,34 @@ app.config(['$routeProvider',
 (function () {
     app.controller("AppController", AppController);
 
-    function AppController() {
+    AppController.$inject = ["NofiticationRepository"];    
+    function AppController(nofiticationRepository) {
         var vm = this;
         vm.appName = "Project Chaptr";
+        debugger;
+        vm.notifications = nofiticationRepository.notifications;
+        
+        vm.removeNotification = function(index){
+            nofiticationRepository.remove(index);
+        }
     }
+})();
+(function () {
+    app.factory("NofiticationRepository", function () {
+        return {
+            notifications: [],
+            add: function (type, message) {
+                debugger;
+                this.notifications.push({
+                    type: type,
+                    message: message
+                });
+            },
+            remove : function(index) {
+                this.notifications.splice();
+            }
+        }
+    });
 })();
 (function () {
     app.controller("DemoPageController", DemoPageController);
@@ -116,12 +140,13 @@ app.config(['$routeProvider',
 })();
 (function () {
     app.controller("ManagePageController", ManagePageController);
-
-    function ManagePageController() {
+    ManagePageController.$inject = ["NofiticationRepository"];
+    
+    function ManagePageController(nofiticationRepository) {
         var vm = this;
         vm.file = null;
         vm.exportedData = null;
-        
+
         vm.importData = function () {
             var element = angular.element("#manage-page-file-import")[0];
             var file = element.files[0];
@@ -135,23 +160,34 @@ app.config(['$routeProvider',
         }
 
         vm.exportData = function () {
-            vm.exportedData = encodeURIComponent(JSON.stringify(localStorage.chapter));
+            try {
+                if (localStorage.chapter) {
+                    vm.exportedData = encodeURIComponent(JSON.stringify(localStorage.chapter));
+                }
+            } catch (error) {
+                nofiticationRepository.add("danger", "No chapter to export");
+            }
         }
 
         function loadDataAsChapter(data) {
             try {
-                var parsedData = JSON.parse(data);
+                var chapter = JSON.parse(data);
 
-                if (!parsedData.id) throw new Error("Missing id");
-                if (!parsedData.name) throw new Error("Missing name");
-                if (!parsedData.number) throw new Error("Missing number");
-                if (!parsedData.language) throw new Error("Missing language");
-                if (!parsedData.dialogs) throw new Error("Missing dialogs");
-
+                isChapterValid(chapter);
                 localStorage.chapter = data;
+                
             } catch (error) {
-                console.error("Data is not readable or invalid : " + error.message);
+                nofiticationRepository.add("danger", "Data is not readable or invalid");
             }
+        }
+
+        function isChapterValid(chapter) {
+            if (!chapter) throw new Error("Chapter is null");
+            if (!chapter.id) throw new Error("Missing id");
+            if (!chapter.name) throw new Error("Missing name");
+            if (!chapter.number) throw new Error("Missing number");
+            if (!chapter.language) throw new Error("Missing language");
+            if (!chapter.dialogs) throw new Error("Missing dialogs");
         }
     }
 })();
