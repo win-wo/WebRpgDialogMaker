@@ -4,7 +4,8 @@
     function ManagePageController() {
         var vm = this;
         vm.file = null;
-
+        vm.exportedData = null;
+        
         vm.importData = function () {
             var element = angular.element("#manage-page-file-import")[0];
             var file = element.files[0];
@@ -18,7 +19,7 @@
         }
 
         vm.exportData = function () {
-            
+            vm.exportedData = encodeURIComponent(JSON.stringify(localStorage.chapter));
         }
 
         function loadDataAsChapter(data) {

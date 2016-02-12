@@ -1,28 +1,32 @@
 app = angular.module("WebRpgDialogMaker", ["ngRoute"]);
 
+app.config(['$compileProvider', function ($compileProvider) {
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|data):/);
+}]);
+
 app.config(['$routeProvider',
-  function($routeProvider) {
-    $routeProvider.
-      when('/manage', {
-        templateUrl: 'public/services/manage/index.html',
-        controller: 'ManagePageController',
-        controllerAs : 'ManagePage'
-      }).
-      when('/edit/', {
-        templateUrl: 'public/services/edit/index.html',
-        controller: 'EditPageController',
-        controllerAs : 'EditPage'
-      }).
-      when('/demo/:dialogId', {
-        templateUrl: 'public/services/demo/index.html',
-        controller: 'DemoPageController',
-        controllerAs : 'DemoPage'
-      }).
-      otherwise({
-        redirectTo: '/manage'
-      });
-  }]);
-  
+    function ($routeProvider) {
+        $routeProvider.
+            when('/manage', {
+                templateUrl: 'public/services/manage/index.html',
+                controller: 'ManagePageController',
+                controllerAs: 'ManagePage'
+            }).
+            when('/edit/', {
+                templateUrl: 'public/services/edit/index.html',
+                controller: 'EditPageController',
+                controllerAs: 'EditPage'
+            }).
+            when('/demo/:dialogId', {
+                templateUrl: 'public/services/demo/index.html',
+                controller: 'DemoPageController',
+                controllerAs: 'DemoPage'
+            }).
+            otherwise({
+                redirectTo: '/manage'
+            });
+    }]);
+
 (function () {
     app.controller("AppController", AppController);
 
@@ -116,7 +120,8 @@ app.config(['$routeProvider',
     function ManagePageController() {
         var vm = this;
         vm.file = null;
-
+        vm.exportedData = null;
+        
         vm.importData = function () {
             var element = angular.element("#manage-page-file-import")[0];
             var file = element.files[0];
@@ -130,10 +135,7 @@ app.config(['$routeProvider',
         }
 
         vm.exportData = function () {
-            var data = localStorage.chapter;
-            var url = 'data:text/json;charset=utf8,' + encodeURIComponent(data);
-            window.open(url, '_blank');
-            window.focus();
+            vm.exportedData = encodeURIComponent(JSON.stringify(localStorage.chapter));
         }
 
         function loadDataAsChapter(data) {
