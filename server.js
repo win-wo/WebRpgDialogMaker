@@ -9,7 +9,7 @@ var http = require('http').createServer(app);
 http.listen(port);
 
 app.set('view engine', 'ejs');
-app.get('/', function (req, res) {
+app.get('*', function (req, res) {
     res.render('pages/index');
 });
 

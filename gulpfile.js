@@ -5,21 +5,23 @@ var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');  
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('sass', function () {
     return gulp.src('./public/services/**/*.scss')
         .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
-        .pipe(concat("app.min.css"))
+        .pipe(concat("dist.min.css"))
         .pipe(gulp.dest('./public'));
 });
 
 gulp.task('javascript', function () {
     gulp.src(['public/services/app.js', 'public/services/**/*.js'])
-        .pipe(concat('app.js'))
-        .pipe(gulp.dest("public"))
-        .pipe(rename('app.min.js'))
+        .pipe(sourcemaps.init())
+        .pipe(concat('dist.js'))
+        .pipe(rename('dist.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest("public"));
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('public'));
 });
 
 gulp.task('build', ['sass', 'javascript'])
