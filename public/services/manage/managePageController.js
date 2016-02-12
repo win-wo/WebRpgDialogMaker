@@ -1,8 +1,7 @@
 (function () {
     app.controller("ManagePageController", ManagePageController);
-    ManagePageController.$inject = ["NofiticationRepository"];
     
-    function ManagePageController(nofiticationRepository) {
+    function ManagePageController() {
         var vm = this;
         vm.file = null;
         vm.exportedData = null;
@@ -25,7 +24,7 @@
                     vm.exportedData = encodeURIComponent(JSON.stringify(localStorage.chapter));
                 }
             } catch (error) {
-                nofiticationRepository.add("danger", "No chapter to export");
+                app.Data.NofiticationRepository.add("danger", "No chapter to export");
             }
         }
 
@@ -37,7 +36,7 @@
                 localStorage.chapter = data;
                 
             } catch (error) {
-                nofiticationRepository.add("danger", "Data is not readable or invalid");
+                app.Data.NofiticationRepository.add("danger", "Data is not readable or invalid");
             }
         }
 

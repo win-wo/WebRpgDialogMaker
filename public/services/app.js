@@ -30,15 +30,14 @@ app.config(['$routeProvider',
 (function () {
     app.controller("AppController", AppController);
 
-    AppController.$inject = ["NofiticationRepository"];    
-    function AppController(nofiticationRepository) {
+    function AppController() {
         var vm = this;
         vm.appName = "Project Chaptr";
         debugger;
-        vm.notifications = nofiticationRepository.notifications;
-        
+        vm.notifications = app.Data.NofiticationRepository.notifications;
+        app.Data.NofiticationRepository.add("success", "YEAH");
         vm.removeNotification = function(index){
-            nofiticationRepository.remove(index);
+            app.Data.NofiticationRepository.remove(index);
         }
     }
 })();

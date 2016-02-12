@@ -30,40 +30,32 @@ app.config(['$routeProvider',
 (function () {
     app.controller("AppController", AppController);
 
-    AppController.$inject = ["NofiticationRepository"];    
-    function AppController(nofiticationRepository) {
+    function AppController() {
         var vm = this;
         vm.appName = "Project Chaptr";
         debugger;
-        vm.notifications = nofiticationRepository.notifications;
-        
+        vm.notifications = app.Data.NofiticationRepository.notifications;
+        app.Data.NofiticationRepository.add("success", "YEAH");
         vm.removeNotification = function(index){
-            nofiticationRepository.remove(index);
+            app.Data.NofiticationRepository.remove(index);
         }
     }
 })();
 (function () {
-    app.factory("NofiticationRepository", function () {
-        return {
-            notifications: [],
-            add: function (type, message) {
-                debugger;
-                this.notifications.push({
-                    type: type,
-                    message: message
-                });
-            },
-            remove : function(index) {
-                this.notifications.splice();
-            }
+    app.Data.NofiticationRepository = new NofiticationRepository();
+    
+    function NofiticationRepository(){
+        this.notifications = [],
+        this.add = function (type, message) {
+            debugger;
+            this.notifications.push({
+                type: type,
+                message: message
+            });
+        },
+        this.remove =  function(index) {
+            this.notifications.splice();
         }
-    });
-})();
-(function () {
-    app.controller("DemoPageController", DemoPageController);
-
-    function DemoPageController() {
-        var vm = this;
     }
 })();
 (function () {
@@ -139,10 +131,16 @@ app.config(['$routeProvider',
     }
 })();
 (function () {
+    app.controller("DemoPageController", DemoPageController);
+
+    function DemoPageController() {
+        var vm = this;
+    }
+})();
+(function () {
     app.controller("ManagePageController", ManagePageController);
-    ManagePageController.$inject = ["NofiticationRepository"];
     
-    function ManagePageController(nofiticationRepository) {
+    function ManagePageController() {
         var vm = this;
         vm.file = null;
         vm.exportedData = null;
@@ -165,7 +163,7 @@ app.config(['$routeProvider',
                     vm.exportedData = encodeURIComponent(JSON.stringify(localStorage.chapter));
                 }
             } catch (error) {
-                nofiticationRepository.add("danger", "No chapter to export");
+                app.Data.NofiticationRepository.add("danger", "No chapter to export");
             }
         }
 
@@ -177,7 +175,7 @@ app.config(['$routeProvider',
                 localStorage.chapter = data;
                 
             } catch (error) {
-                nofiticationRepository.add("danger", "Data is not readable or invalid");
+                app.Data.NofiticationRepository.add("danger", "Data is not readable or invalid");
             }
         }
 
