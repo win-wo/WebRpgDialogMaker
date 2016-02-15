@@ -132,7 +132,11 @@ app.config(['$routeProvider',
             return guid;
         }
         function getFromStorage(){
-            return JSON.parse(localStorage.chapter);
+            try {
+                return JSON.parse(localStorage.chapter);    
+            } catch (error) {
+                return null;   
+            }
         }
         function saveToStorage(){
             localStorage.chapter = JSON.stringify(vm.chapter);
@@ -159,6 +163,14 @@ app.config(['$routeProvider',
     }
 })();
 (function () {
+    app.controller("ToolbarController", ToolbarController);
+    
+    function ToolbarController() {
+        var vm = this;
+       
+    }
+})();
+(function () {
     app.controller("NotificationsController", NotificationsController);
 
     function NotificationsController() {
@@ -172,12 +184,3 @@ app.config(['$routeProvider',
     }
 })();
 
-
-(function () {
-    app.controller("ToolbarController", ToolbarController);
-    
-    function ToolbarController() {
-        var vm = this;
-       
-    }
-})();
