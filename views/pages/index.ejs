@@ -15,28 +15,11 @@
                 <h1>{{App.appName}}</h1>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-3">
-                <ul class="nav nav-pills nav-stacked">
-                    <li><a href="#/manage">Manage</a></li>
-                    <li><a href="#/edit">Edit</a></li>
-                    <li><a href="#/demo">Demo</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-6">
-                <div class="row">
-                    <div class="col-sm-12" >
-                        <div ng-repeat="notification in App.notifications" class="alert alert-{{notification.type}}" role="alert" >
-                            {{notification.text}}
-                            <div class="pull-right">
-                                <button ng-click="removeNotification($index)">X</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div ng-view></div>
-            </div>
-        </div>
+        <div ng-include="'public/services/toolbar/index.html'"></div>
+        <div ng-include="'public/services/notifications/index.html'"></div>
+
+        <div ng-view></div>
+        <br>
     </main>
     <footer>
     </footer>

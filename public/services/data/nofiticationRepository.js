@@ -4,7 +4,6 @@
     function NofiticationRepository(){
         this.notifications = [],
         this.add = function (type, message) {
-            debugger;
             this.notifications.push({
                 type: type,
                 message: message

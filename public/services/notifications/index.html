@@ -1,0 +1,10 @@
+<div class="row" ng-controller="NotificationsController as Notifications">
+    <div class="col-sm-12">
+        <div ng-repeat="notification in Notifications.notifications" class="alert alert-{{notification.type}}" role="alert">
+            {{notification.text}}
+            <div class="pull-right">
+                <button ng-click="removeNotification($index)">X</button>
+            </div>
+        </div>
+    </div>
+</div>

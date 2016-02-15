@@ -6,6 +6,9 @@ body{
     background-color: $color-background;
     font-family: 'Arimo', sans-serif;
     
+    hr{
+        border-bottom: 3px solid $color-primary-0;
+    }
     h1,.h1{
         font-family: 'Permanent Marker', cursive;
         border-bottom: 3px solid $color-primary-0;
@@ -15,6 +18,9 @@ body{
         margin-top:10px;
     }
     
+    .btn{
+        border-radius:0px;
+    }
     
     section {
         color:$color-text-section;

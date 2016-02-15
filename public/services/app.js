@@ -7,23 +7,13 @@ app.config(['$compileProvider', function ($compileProvider) {
 app.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
-            when('/manage', {
-                templateUrl: 'public/services/manage/index.html',
-                controller: 'ManagePageController',
-                controllerAs: 'ManagePage'
-            }).
-            when('/edit/', {
+            when('/edit', {
                 templateUrl: 'public/services/edit/index.html',
                 controller: 'EditPageController',
                 controllerAs: 'EditPage'
             }).
-            when('/demo/:dialogId', {
-                templateUrl: 'public/services/demo/index.html',
-                controller: 'DemoPageController',
-                controllerAs: 'DemoPage'
-            }).
             otherwise({
-                redirectTo: '/manage'
+                redirectTo: '/edit'
             });
     }]);
 
@@ -33,11 +23,7 @@ app.config(['$routeProvider',
     function AppController() {
         var vm = this;
         vm.appName = "Project Chaptr";
-        debugger;
-        vm.notifications = app.Data.NofiticationRepository.notifications;
-        app.Data.NofiticationRepository.add("success", "YEAH");
-        vm.removeNotification = function(index){
-            app.Data.NofiticationRepository.remove(index);
-        }
+        
+        vm.chapter
     }
 })();

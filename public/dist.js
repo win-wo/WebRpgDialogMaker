@@ -7,23 +7,13 @@ app.config(['$compileProvider', function ($compileProvider) {
 app.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
-            when('/manage', {
-                templateUrl: 'public/services/manage/index.html',
-                controller: 'ManagePageController',
-                controllerAs: 'ManagePage'
-            }).
-            when('/edit/', {
+            when('/edit', {
                 templateUrl: 'public/services/edit/index.html',
                 controller: 'EditPageController',
                 controllerAs: 'EditPage'
             }).
-            when('/demo/:dialogId', {
-                templateUrl: 'public/services/demo/index.html',
-                controller: 'DemoPageController',
-                controllerAs: 'DemoPage'
-            }).
             otherwise({
-                redirectTo: '/manage'
+                redirectTo: '/edit'
             });
     }]);
 
@@ -33,12 +23,8 @@ app.config(['$routeProvider',
     function AppController() {
         var vm = this;
         vm.appName = "Project Chaptr";
-        debugger;
-        vm.notifications = app.Data.NofiticationRepository.notifications;
-        app.Data.NofiticationRepository.add("success", "YEAH");
-        vm.removeNotification = function(index){
-            app.Data.NofiticationRepository.remove(index);
-        }
+        
+        vm.chapter
     }
 })();
 (function () {
@@ -47,7 +33,6 @@ app.config(['$routeProvider',
     function NofiticationRepository(){
         this.notifications = [],
         this.add = function (type, message) {
-            debugger;
             this.notifications.push({
                 type: type,
                 message: message
@@ -60,12 +45,11 @@ app.config(['$routeProvider',
 })();
 (function () {
     app.controller("EditPageController", EditPageController);
-    EditPageController.$inject = ["$location","DialogModel"];
+    EditPageController.$inject = ["$location"];
     
-    function EditPageController($location, DialogModel) {
+    function EditPageController($location) {
         var vm = this;
-        vm.newDialog = {};
-        
+        //dialogs
         vm.chapter = getFromStorage() || {
             id : null,
             name : null,
@@ -73,80 +57,51 @@ app.config(['$routeProvider',
             language : null,
             dialogs : []
         };
+        vm.dialogModal = {
+            id : "#dialogModal",
+            dialog : {},
+        };
+        //export/import
+        vm.file = null;
+        vm.exportedData = null;
         
-        vm.addNewDialog = function(){
-            var dialog = new DialogModel();
-            
-            dialog.id = generateGuid();
-            dialog.name = vm.newDialog.name;
-            dialog.number = vm.newDialog.number;
-            dialog.language = vm.newDialog.language;
-            
-            vm.chapter.dialogs.push(dialog);
-            vm.newDialog = {};
-        }   
-             
-        vm.saveDialog = function(){
-            var dialog = new DialogModel();
-            
-            dialog.id = vm.newDialog.id;
-            dialog.name = vm.newDialog.name;
-            dialog.number = vm.newDialog.number;
-            dialog.language = vm.newDialog.language;
-            
-            var index = _.findIndex(vm.chapter.dialogs, {id : dialog.id});
-            if(index != -1){
-                vm.chapter.dialogs[index] = dialog;    
-            }
+        vm.showDialogModal = function(dialog){
+            angular.copy(dialog, vm.dialogModal.dialog);
+            $(vm.dialogModal.id).modal();
         }
         
+        vm.saveDialog = function(dialog){    
+            var newDialog = {};
+            angular.copy(dialog, newDialog);
+                    
+            newDialog.id = newDialog.id || generateGuid();
+            
+            var index = _.findIndex(vm.chapter.dialogs, {id : newDialog.id});
+            
+            if(index != -1){
+                vm.chapter.dialogs[index] = newDialog;    
+            }
+            else{
+                vm.chapter.dialogs.push(newDialog);
+            }
+            
+            $(vm.dialogModal.id).modal("hide");
+        }
         vm.selectDialog = function(dialog){
-            vm.newDialog = dialog;
+            vm.updateDialogWindowVisible
+            angular.copy(dialog, vm.dialogModal.dialog);
         }
         vm.deleteDialog = function(dialog){
             _.remove(vm.chapter.dialogs, {id : dialog.id});
         }
-        vm.runDialog = function(dialog){
-            $location.path("/demo/" + dialog.id);
+        vm.demoDialog = function(dialog){
+            
         }
         vm.saveToStorage = function(){
             saveToStorage();
         }
-        
-        function generateGuid(){
-            var guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-                return v.toString(16);
-            });
-            return guid;
-        }
-        
-        function getFromStorage(){
-            return JSON.parse(localStorage.chapter);
-        }
-        
-        function saveToStorage(){
-            localStorage.chapter = JSON.stringify(vm.chapter);
-        }
-    }
-})();
-(function () {
-    app.controller("DemoPageController", DemoPageController);
-
-    function DemoPageController() {
-        var vm = this;
-    }
-})();
-(function () {
-    app.controller("ManagePageController", ManagePageController);
-    
-    function ManagePageController() {
-        var vm = this;
-        vm.file = null;
-        vm.exportedData = null;
-
         vm.importData = function () {
-            var element = angular.element("#manage-page-file-import")[0];
+            var element = angular.element("#toolbar-file-import")[0];
             var file = element.files[0];
             var reader = new FileReader();
 
@@ -156,7 +111,6 @@ app.config(['$routeProvider',
 
             reader.readAsText(file);
         }
-
         vm.exportData = function () {
             try {
                 if (localStorage.chapter) {
@@ -166,7 +120,20 @@ app.config(['$routeProvider',
                 app.Data.NofiticationRepository.add("danger", "No chapter to export");
             }
         }
-
+        
+        function generateGuid(){
+            var guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+                return v.toString(16);
+            });
+            return guid;
+        }
+        function getFromStorage(){
+            return JSON.parse(localStorage.chapter);
+        }
+        function saveToStorage(){
+            localStorage.chapter = JSON.stringify(vm.chapter);
+        }
         function loadDataAsChapter(data) {
             try {
                 var chapter = JSON.parse(data);
@@ -178,7 +145,6 @@ app.config(['$routeProvider',
                 app.Data.NofiticationRepository.add("danger", "Data is not readable or invalid");
             }
         }
-
         function isChapterValid(chapter) {
             if (!chapter) throw new Error("Chapter is null");
             if (!chapter.id) throw new Error("Missing id");
@@ -190,12 +156,25 @@ app.config(['$routeProvider',
     }
 })();
 (function () {
-    app.factory("DialogModel", function () { return DialogModel })
+    app.controller("NotificationsController", NotificationsController);
 
-    function DialogModel() {
-        this.id = null;
-        this.name = null;
-        this.number = null;
-        this.language = null;
+    function NotificationsController() {
+        var vm = this;
+
+        vm.notifications = app.Data.NofiticationRepository.notifications;
+        app.Data.NofiticationRepository.add("success", "YEAH");
+        vm.removeNotification = function (index) {
+            app.Data.NofiticationRepository.remove(index);
+        }
+    }
+})();
+
+
+(function () {
+    app.controller("ToolbarController", ToolbarController);
+    
+    function ToolbarController() {
+        var vm = this;
+       
     }
 })();
