@@ -5,7 +5,7 @@
         var vm = this;
 
         vm.notifications = app.Data.NofiticationRepository.notifications;
-        app.Data.NofiticationRepository.add("success", "YEAH");
+        // app.Data.NofiticationRepository.add("success", "YEAH");
         vm.removeNotification = function (index) {
             app.Data.NofiticationRepository.remove(index);
         }
