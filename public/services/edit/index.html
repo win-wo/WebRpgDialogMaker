@@ -106,6 +106,11 @@
         </div>
     </div>
 </div>
-<pre>
-    {{JSON.stringify(EditPage.chapter)}}
-</pre>
+
+<button class="btn btn-default" data-toggle="collapse" data-target="#jsonViewer" ng-click="EditPage.updateChapterJson()">View JSON</button>
+<div id="jsonViewer" class="collapse">
+    <br>
+    <pre>
+        {{EditPage.chapterJson}}
+    </pre>
+</div>

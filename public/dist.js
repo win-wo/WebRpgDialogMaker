@@ -120,6 +120,9 @@ app.config(['$routeProvider',
                 app.Data.NofiticationRepository.add("danger", "No chapter to export");
             }
         }
+        vm.updateChapterJson = function(){
+            vm.chapterJson = JSON.stringify(vm.chapter, undefined, 2);
+        }
         
         function generateGuid(){
             var guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -162,7 +165,7 @@ app.config(['$routeProvider',
         var vm = this;
 
         vm.notifications = app.Data.NofiticationRepository.notifications;
-        app.Data.NofiticationRepository.add("success", "YEAH");
+        // app.Data.NofiticationRepository.add("success", "YEAH");
         vm.removeNotification = function (index) {
             app.Data.NofiticationRepository.remove(index);
         }
