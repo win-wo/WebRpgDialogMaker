@@ -163,14 +163,6 @@ app.config(['$routeProvider',
     }
 })();
 (function () {
-    app.controller("ToolbarController", ToolbarController);
-    
-    function ToolbarController() {
-        var vm = this;
-       
-    }
-})();
-(function () {
     app.controller("NotificationsController", NotificationsController);
 
     function NotificationsController() {
@@ -184,3 +176,12 @@ app.config(['$routeProvider',
     }
 })();
 
+
+(function () {
+    app.controller("ToolbarController", ToolbarController);
+    
+    function ToolbarController() {
+        var vm = this;
+       
+    }
+})();

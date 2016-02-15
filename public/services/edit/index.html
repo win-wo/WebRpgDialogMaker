@@ -57,12 +57,10 @@
         <table class="table table-responsive">
             <tr>
                 <th>Key</th>
-                <th>Language</th>
                 <th>Actions</th>
             </tr>
             <tr ng-repeat="dialog in EditPage.chapter.dialogs">
                 <td>{{dialog.number}} - {{dialog.name}}</td>
-                <td>{{dialog.language}}</td>
                 <td>
                     <button class="btn btn-default" ng-click="EditPage.showDialogModal(dialog)">
                         <i class="fa fa-pencil"></i>
@@ -86,13 +84,19 @@
                 <h4 class="modal-title">Modal title</h4>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    Name :
-                    <input type="text" class="form-control" ng-model="EditPage.dialogModal.dialog.name">
-                </div>
-                <div class="form-group">
-                    Number :
-                    <input type="number" class="form-control" ng-model="EditPage.dialogModal.dialog.number">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            Name :
+                            <input type="text" class="form-control" ng-model="EditPage.dialogModal.dialog.name">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            Number :
+                            <input type="number" class="form-control" ng-model="EditPage.dialogModal.dialog.number">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
