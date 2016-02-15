@@ -1,9 +1,9 @@
 <div class="row" ng-controller="NotificationsController as Notifications">
     <div class="col-sm-12">
         <div ng-repeat="notification in Notifications.notifications" class="alert alert-{{notification.type}}" role="alert">
-            {{notification.text}}
+            {{notification.message}}
             <div class="pull-right">
-                <button ng-click="removeNotification($index)">X</button>
+                <button ng-click="Notifications.removeNotification($index)"><i class="fa fa-times"></i></button>
             </div>
         </div>
     </div>

@@ -1,13 +1,13 @@
 (function () {
     app.controller("NotificationsController", NotificationsController);
-
-    function NotificationsController() {
+    NotificationsController.$inject = ["Notifications"]
+    function NotificationsController(Notifications) {
         var vm = this;
 
-        vm.notifications = app.Data.NofiticationRepository.notifications;
-        // app.Data.NofiticationRepository.add("success", "YEAH");
+        vm.notifications = Notifications.list;
+        
         vm.removeNotification = function (index) {
-            app.Data.NofiticationRepository.remove(index);
+            vm.notifications.splice(index, 1);
         }
     }
 })();

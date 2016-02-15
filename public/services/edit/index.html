@@ -1,14 +1,20 @@
 <div class="row">
     <div class="col-sm-6">
-        <input class="pull-left" type="file" id="toolbar-file-import" />
+        <div class="form-group">
+            <input type="file" id="toolbar-file-import"/>
+        </div>
     </div>
     <div class="col-sm-6">
         <div class="form-group">
-            <button class="btn btn-primary btn-sm" ng-click="EditPage.importData()">Import</button>
-            <button class="btn btn-primary btn-sm" ng-click="EditPage.exportData()">Export</button>
-            <button class="btn btn-primary btn-sm" ng-click="EditPage.saveToStorage()">Save</button>
+            <button class="btn btn-primary btn-sm" ng-click="EditPage.importData()">
+                <i class="fa fa-upload"></i> Import
+            </button>
+            <button class="btn btn-primary btn-sm" ng-click="EditPage.exportData()">
+                <i class="fa fa-download"></i> Export
+            </button>
+            <button class="btn btn-primary btn-sm" ng-click="EditPage.saveToStorage()"><i class="fa fa-floppy-o"></i></button>
         </div>
-        <a class="" href="data:text/json;charset=utf-8,{{EditPage.exportedData}}" download="chapter.json" ng-if="EditPage.exportedData">Download</a>
+        <a class="" href="data:text/json;charset=utf-8,{{EditPage.exportedData}}" download="{{EditPage.chapter.number}}.{{EditPage.chapter.name}}.{{EditPage.chapter.language}}.json" ng-if="EditPage.exportedData">Download</a>
     </div>
 </div>
 <div class="row">

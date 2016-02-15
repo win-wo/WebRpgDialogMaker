@@ -27,89 +27,94 @@ app.config(['$routeProvider',
         vm.chapter
     }
 })();
-(function () {
-    app.Data.NofiticationRepository = new NofiticationRepository();
-    
-    function NofiticationRepository(){
-        this.notifications = [],
-        this.add = function (type, message) {
-            this.notifications.push({
-                type: type,
-                message: message
-            });
-        },
-        this.remove =  function(index) {
-            this.notifications.splice();
-        }
-    }
-})();
+app.factory('Notifications', function(){
+  var Notifications = {};
+
+  Notifications.list = [];
+
+  Notifications.add = function(type, message){
+    Notifications.list.push({
+        type : type,
+        message : message
+    });
+  };
+
+  return Notifications;
+});
 (function () {
     app.controller("EditPageController", EditPageController);
-    EditPageController.$inject = ["$location"];
-    
-    function EditPageController($location) {
+    EditPageController.$inject = ["$location", "Notifications"];
+
+    function EditPageController($location, Notifications) {
         var vm = this;
         //dialogs
         vm.chapter = getFromStorage() || {
-            id : null,
-            name : null,
-            number : null,
-            language : null,
-            dialogs : []
+            id: generateGuid(),
+            name: null,
+            number: null,
+            language: null,
+            dialogs: []
         };
         vm.dialogModal = {
-            id : "#dialogModal",
-            dialog : {},
+            id: "#dialogModal",
+            dialog: {},
         };
         //export/import
         vm.file = null;
-        vm.exportedData = null;
+        vm.exportedData = null;        
         
-        vm.showDialogModal = function(dialog){
+        //Dialogs
+        vm.showDialogModal = function (dialog) {
             angular.copy(dialog, vm.dialogModal.dialog);
             $(vm.dialogModal.id).modal();
         }
-        
-        vm.saveDialog = function(dialog){    
+
+        vm.saveDialog = function (dialog) {
             var newDialog = {};
             angular.copy(dialog, newDialog);
-                    
+
             newDialog.id = newDialog.id || generateGuid();
-            
-            var index = _.findIndex(vm.chapter.dialogs, {id : newDialog.id});
-            
-            if(index != -1){
-                vm.chapter.dialogs[index] = newDialog;    
+
+            var index = _.findIndex(vm.chapter.dialogs, { id: newDialog.id });
+
+            if (index != -1) {
+                vm.chapter.dialogs[index] = newDialog;
             }
-            else{
+            else {
                 vm.chapter.dialogs.push(newDialog);
             }
-            
+
             $(vm.dialogModal.id).modal("hide");
         }
-        vm.selectDialog = function(dialog){
+        vm.selectDialog = function (dialog) {
             vm.updateDialogWindowVisible
             angular.copy(dialog, vm.dialogModal.dialog);
         }
-        vm.deleteDialog = function(dialog){
-            _.remove(vm.chapter.dialogs, {id : dialog.id});
+        vm.deleteDialog = function (dialog) {
+            _.remove(vm.chapter.dialogs, { id: dialog.id });
         }
-        vm.demoDialog = function(dialog){
-            
+        vm.demoDialog = function (dialog) {
+
         }
-        vm.saveToStorage = function(){
+        //Import Export
+        vm.saveToStorage = function () {
             saveToStorage();
         }
         vm.importData = function () {
-            var element = angular.element("#toolbar-file-import")[0];
-            var file = element.files[0];
-            var reader = new FileReader();
+            try {
+                var element = angular.element("#toolbar-file-import")[0];
+                if (element.files.length == 0) throw new Error("No file selected");
+                var file = element.files[0];
+                var reader = new FileReader();
 
-            reader.onload = function (e) {
-                loadDataAsChapter(reader.result);
-            };
+                reader.onload = function (e) {
+                    loadDataAsChapter(reader.result);
+                };
 
-            reader.readAsText(file);
+                reader.readAsText(file);
+            } catch (error) {
+                Notifications.add("danger", "Impossible to import : " + error.message);
+            }
         }
         vm.exportData = function () {
             try {
@@ -117,39 +122,38 @@ app.config(['$routeProvider',
                     vm.exportedData = encodeURIComponent(JSON.stringify(localStorage.chapter));
                 }
             } catch (error) {
-                app.Data.NofiticationRepository.add("danger", "No chapter to export");
+                Notifications.add("danger", "Impossible to export, please save your data first");
             }
         }
-        vm.updateChapterJson = function(){
+        vm.updateChapterJson = function () {
             vm.chapterJson = JSON.stringify(vm.chapter, undefined, 2);
         }
-        
-        function generateGuid(){
-            var guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+
+        function generateGuid() {
+            var guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
                 return v.toString(16);
             });
             return guid;
         }
-        function getFromStorage(){
+        function getFromStorage() {
             try {
-                return JSON.parse(localStorage.chapter);    
+                return JSON.parse(localStorage.chapter);
             } catch (error) {
-                return null;   
+                return null;
             }
         }
-        function saveToStorage(){
+        function saveToStorage() {
             localStorage.chapter = JSON.stringify(vm.chapter);
         }
         function loadDataAsChapter(data) {
             try {
-                var chapter = JSON.parse(data);
+                var chapter = JSON.parse(JSON.parse(data));
 
                 isChapterValid(chapter);
                 localStorage.chapter = data;
-                
             } catch (error) {
-                app.Data.NofiticationRepository.add("danger", "Data is not readable or invalid");
+                Notifications.add("danger", "File is not valid : " + error.message);
             }
         }
         function isChapterValid(chapter) {
@@ -164,14 +168,14 @@ app.config(['$routeProvider',
 })();
 (function () {
     app.controller("NotificationsController", NotificationsController);
-
-    function NotificationsController() {
+    NotificationsController.$inject = ["Notifications"]
+    function NotificationsController(Notifications) {
         var vm = this;
 
-        vm.notifications = app.Data.NofiticationRepository.notifications;
-        // app.Data.NofiticationRepository.add("success", "YEAH");
+        vm.notifications = Notifications.list;
+        
         vm.removeNotification = function (index) {
-            app.Data.NofiticationRepository.remove(index);
+            vm.notifications.splice(index, 1);
         }
     }
 })();
