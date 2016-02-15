@@ -87,7 +87,11 @@
             return guid;
         }
         function getFromStorage(){
-            return JSON.parse(localStorage.chapter);
+            try {
+                return JSON.parse(localStorage.chapter);    
+            } catch (error) {
+                return null;   
+            }
         }
         function saveToStorage(){
             localStorage.chapter = JSON.stringify(vm.chapter);
