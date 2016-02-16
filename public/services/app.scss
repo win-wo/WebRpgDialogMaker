@@ -5,9 +5,10 @@ body{
     color:$color-text;
     background-color: $color-background;
     font-family: 'Arimo', sans-serif;
-    
+    //Default
     hr{
         border-bottom: 3px solid $color-primary-0;
+        margin:10px 0;
     }
     h1,.h1{
         font-family: 'Permanent Marker', cursive;
@@ -17,9 +18,12 @@ body{
     .h1, .h2, .h3, h1, h2, h3{
         margin-top:10px;
     }
-    
+    //Form
     .btn{
         border-radius:0px;
+    }
+    input, textarea{
+        border-radius : 0;
     }
     
     section {

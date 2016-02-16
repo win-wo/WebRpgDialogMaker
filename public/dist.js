@@ -61,8 +61,8 @@ app.factory('Notifications', function(){
         };
         //export/import
         vm.file = null;
-        vm.exportedData = null;        
-        
+        vm.serializedChapterForExport = null;        
+        vm.serializedChapterForVisualisation = null;
         //Dialogs
         vm.showDialogModal = function (dialog) {
             angular.copy(dialog, vm.dialogModal.dialog);
@@ -100,7 +100,7 @@ app.factory('Notifications', function(){
         vm.saveToStorage = function () {
             saveToStorage();
         }
-        vm.importData = function () {
+        vm.importChapter = function () {
             try {
                 var element = angular.element("#toolbar-file-import")[0];
                 if (element.files.length == 0) throw new Error("No file selected");
@@ -116,17 +116,20 @@ app.factory('Notifications', function(){
                 Notifications.add("danger", "Impossible to import : " + error.message);
             }
         }
-        vm.exportData = function () {
+        vm.exportChapter = function () {
             try {
                 if (localStorage.chapter) {
-                    vm.exportedData = encodeURIComponent(JSON.stringify(localStorage.chapter));
+                    vm.serializedChapterForExport = encodeURIComponent(JSON.stringify(localStorage.chapter));
                 }
             } catch (error) {
                 Notifications.add("danger", "Impossible to export, please save your data first");
             }
         }
-        vm.updateChapterJson = function () {
-            vm.chapterJson = JSON.stringify(vm.chapter, undefined, 2);
+        vm.resetChapter = function(){
+            vm.chapter = {};
+        }
+        vm.updateSerializedChapterForVisualisation = function () {
+            vm.serializedChapterForVisualisation = JSON.stringify(vm.chapter, undefined, 2);
         }
 
         function generateGuid() {
@@ -167,6 +170,14 @@ app.factory('Notifications', function(){
     }
 })();
 (function () {
+    app.controller("ToolbarController", ToolbarController);
+    
+    function ToolbarController() {
+        var vm = this;
+       
+    }
+})();
+(function () {
     app.controller("NotificationsController", NotificationsController);
     NotificationsController.$inject = ["Notifications"]
     function NotificationsController(Notifications) {
@@ -180,12 +191,3 @@ app.factory('Notifications', function(){
     }
 })();
 
-
-(function () {
-    app.controller("ToolbarController", ToolbarController);
-    
-    function ToolbarController() {
-        var vm = this;
-       
-    }
-})();

@@ -6,15 +6,18 @@
     </div>
     <div class="col-sm-6">
         <div class="form-group">
-            <button class="btn btn-primary btn-sm" ng-click="EditPage.importData()">
+            <button class="btn btn-primary btn-sm" ng-click="EditPage.importChapter()">
                 <i class="fa fa-upload"></i> Import
             </button>
-            <button class="btn btn-primary btn-sm" ng-click="EditPage.exportData()">
+            <button class="btn btn-primary btn-sm" ng-click="EditPage.exportChapter()">
                 <i class="fa fa-download"></i> Export
             </button>
             <button class="btn btn-primary btn-sm" ng-click="EditPage.saveToStorage()"><i class="fa fa-floppy-o"></i></button>
+            <button class="btn btn-primary btn-sm" ng-click="EditPage.resetChapter()">
+                <i class="fa fa-refresh"></i>
+            </button>
         </div>
-        <a class="" href="data:text/json;charset=utf-8,{{EditPage.exportedData}}" download="{{EditPage.chapter.number}}.{{EditPage.chapter.name}}.{{EditPage.chapter.language}}.json" ng-if="EditPage.exportedData">Download</a>
+        <a class="" href="data:text/json;charset=utf-8,{{EditPage.serializedChapterForExport}}" download="{{EditPage.chapter.number}}.{{EditPage.chapter.name}}.{{EditPage.chapter.language}}.json" ng-if="EditPage.exportedData">Download</a>
     </div>
 </div>
 <div class="row">
@@ -52,7 +55,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="form-group">
-            <button type="button" class="btn btn-default" ng-click="EditPage.showDialogModal()">
+            <button type="button" class="btn btn-default btn-sm" ng-click="EditPage.showDialogModal()">
                 <i class="fa fa-plus"></i>
             </button>
         </div>
@@ -68,13 +71,13 @@
             <tr ng-repeat="dialog in EditPage.chapter.dialogs">
                 <td>{{dialog.number}} - {{dialog.name}}</td>
                 <td>
-                    <button class="btn btn-default" ng-click="EditPage.showDialogModal(dialog)">
+                    <button class="btn btn-default btn-sm" ng-click="EditPage.showDialogModal(dialog)">
                         <i class="fa fa-pencil"></i>
                     </button>
-                    <button class="btn btn-danger" ng-click="EditPage.deleteDialog(dialog)">
+                    <button class="btn btn-danger btn-sm" ng-click="EditPage.deleteDialog(dialog)">
                         <i class="fa fa-times"></i>
                     </button>
-                    <button class="btn btn-default" ng-click="EditPage.demoDialog(dialog)">
+                    <button class="btn btn-default btn-sm" ng-click="EditPage.demoDialog(dialog)">
                         <i class="fa fa-laptop"></i>
                     </button>
                 </td>
@@ -87,7 +90,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Modal title</h4>
+                <h4 class="modal-title">Dialog</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -104,6 +107,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <hr>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -113,10 +121,10 @@
     </div>
 </div>
 
-<button class="btn btn-default" data-toggle="collapse" data-target="#jsonViewer" ng-click="EditPage.updateChapterJson()">View JSON</button>
+<button class="btn btn-default btn-sm" data-toggle="collapse" data-target="#jsonViewer" ng-click="EditPage.updateSerializedChapterForVisualisation()">View JSON</button>
 <div id="jsonViewer" class="collapse">
     <br>
     <pre>
-        {{EditPage.chapterJson}}
+        {{EditPage.serializedChapterForVisualisation}}
     </pre>
 </div>
