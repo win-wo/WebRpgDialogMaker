@@ -1,5 +1,5 @@
 app.Data.Notifications = {
-    list: [],
+    data: [],
     add: function (type, message) {
         this.list.push({
             type: type,

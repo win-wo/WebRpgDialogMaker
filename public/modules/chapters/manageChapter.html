@@ -36,19 +36,19 @@
     <div class="col-sm-3">
         <div class="form-group">
             Name :
-            <input type="text" class="form-control" ng-model="ManageChapter.chapter.name">
+            <input type="text" class="form-control" ng-model="ManageChapter.chapterData.chapter.name">
         </div>
     </div>
     <div class="col-sm-3">
         <div class="form-group">
             Number :
-            <input type="number" class="form-control" ng-model="ManageChapter.chapter.number">
+            <input type="number" class="form-control" ng-model="ManageChapter.chapterData.chapter.number">
         </div>
     </div>
     <div class="col-sm-3">
         <div class="form-group">
             Language (e.g. en,fr) :
-            <input type="text" class="form-control" ng-model="ManageChapter.chapter.language">
+            <input type="text" class="form-control" ng-model="ManageChapter.chapterData.chapter.language">
         </div>
     </div>
 </div>
@@ -70,7 +70,7 @@
                 <th>Key</th>
                 <th>Actions</th>
             </tr>
-            <tr ng-repeat="dialog in ManageChapter.chapter.dialogs">
+            <tr ng-repeat="dialog in ManageChapter.chapterData.chapter.dialogs">
                 <td>{{dialog.number}} - {{dialog.name}}</td>
                 <td>
                     <button class="btn btn-default btn-sm" ng-click="ManageChapter.showDialogModal(dialog)">

@@ -5,7 +5,9 @@
     function ManageChapterController($location) {
         var vm = this;
         //dialogs
-        vm.chapter = new app.Models.Chapter(getFromStorage());
+        vm.chapterData = app.Data.Chapter;
+        vm.chapterData.chapter = new app.Models.Chapter(getFromStorage());
+        
         vm.dialogModal = {
             id: "#dialogModal",
             dialog: {},
@@ -27,13 +29,13 @@
 
             newDialog.id = newDialog.id || app.Utils.Guid.newGuid();
 
-            var index = _.findIndex(vm.chapter.dialogs, { id: newDialog.id });
+            var index = _.findIndex(vm.chapterData.chapter.dialogs, { id: newDialog.id });
 
             if (index != -1) {
-                vm.chapter.dialogs[index] = newDialog;
+                vm.chapterData.chapter.dialogs[index] = newDialog;
             }
             else {
-                vm.chapter.dialogs.push(newDialog);
+                vm.chapterData.chapter.dialogs.push(newDialog);
             }
 
             $(vm.dialogModal.id).modal("hide");
@@ -43,7 +45,7 @@
             angular.copy(dialog, vm.dialogModal.dialog);
         }
         vm.deleteDialog = function (dialog) {
-            _.remove(vm.chapter.dialogs, { id: dialog.id });
+            _.remove(vm.chapterData.chapter.dialogs, { id: dialog.id });
         }
         vm.demoDialog = function (dialog) {
 
@@ -70,17 +72,17 @@
         }
         vm.exportChapter = function () {
             try {
-                vm.serializedChapterForExport = encodeURIComponent(JSON.stringify(vm.chapter));
-                vm.exportedFileName = vm.chapter.getFileName();
+                vm.serializedChapterForExport = encodeURIComponent(JSON.stringify(vm.chapterData.chapter));
+                vm.exportedFileName = vm.chapterData.chapter.getFileName();
             } catch (error) {
                 app.Data.Notifications.add("danger", "Error while exporting : " + error.message);
             }
         }
         vm.resetChapter = function(){
-            vm.chapter = new app.Models.Chapter();
+            vm.chapterData.chapter = new app.Models.Chapter();
         }
         vm.updateSerializedChapterForVisualisation = function () {
-            vm.serializedChapterForVisualisation = JSON.stringify(vm.chapter, undefined, 2);
+            vm.serializedChapterForVisualisation = JSON.stringify(vm.chapterData.chapter, undefined, 2);
         }
 
         function getFromStorage() {
@@ -91,7 +93,7 @@
             }
         }
         function saveToStorage() {
-            localStorage.chapter = JSON.stringify(vm.chapter);
+            localStorage.chapter = JSON.stringify(vm.chapterData.chapter);
         }
         function loadDataAsChapter(data) {
             try {
@@ -99,7 +101,7 @@
                 var chapter = new app.Models.Chapter(parsedData);
 
                 chapter.isValid();
-                vm.chapter = chapter;
+                vm.chapterData.chapter = chapter;
                 saveToStorage();
             } catch (error) {
                 app.Data.Notifications.add("danger", "File is not valid : " + error.message);

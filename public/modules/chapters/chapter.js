@@ -4,7 +4,7 @@ app.Models.Chapter = (function () {
         else this.Constructor();
     }
     Chapter.prototype.Constructor = function () {
-        this.id = app.Data.Guid.newGuid();
+        this.id = app.Utils.Guid.newGuid();
         this.name = null;
         this.number = null;
         this.language = null;
