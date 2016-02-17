@@ -7,13 +7,13 @@ app.config(['$compileProvider', function ($compileProvider) {
 app.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
-            when('/edit', {
-                templateUrl: 'public/modules/chapter/index.html',
-                controller: 'EditChapterController',
-                controllerAs: 'EditChapter'
+            when('/chapters/manage', {
+                templateUrl: 'public/modules/chapters/manageChapter.html',
+                controller: 'ManageChapterController',
+                controllerAs: 'ManageChapter'
             }).
             otherwise({
-                redirectTo: '/edit'
+                redirectTo: '/chapters/manage'
             });
     }]);
 
@@ -63,10 +63,10 @@ app.config(['$routeProvider',
     }
 })();
 (function () {
-    app.controller("EditChapterController", EditChapterController);
-    EditChapterController.$inject = ["$location", "Chapter","NotificationsRepository", "Guid"];
+    app.controller("ManageChapterController", ManageChapterController);
+    ManageChapterController.$inject = ["$location", "Chapter","NotificationsRepository", "Guid"];
 
-    function EditChapterController($location, Chapter, NotificationsRepository, Guid) {
+    function ManageChapterController($location, Chapter, NotificationsRepository, Guid) {
         var vm = this;
         //dialogs
         vm.chapter = new Chapter(getFromStorage());

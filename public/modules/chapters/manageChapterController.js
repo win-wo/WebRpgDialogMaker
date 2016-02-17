@@ -1,8 +1,8 @@
 (function () {
-    app.controller("EditChapterController", EditChapterController);
-    EditChapterController.$inject = ["$location", "Chapter","NotificationsRepository", "Guid"];
+    app.controller("ManageChapterController", ManageChapterController);
+    ManageChapterController.$inject = ["$location", "Chapter","NotificationsRepository", "Guid"];
 
-    function EditChapterController($location, Chapter, NotificationsRepository, Guid) {
+    function ManageChapterController($location, Chapter, NotificationsRepository, Guid) {
         var vm = this;
         //dialogs
         vm.chapter = new Chapter(getFromStorage());
@@ -70,7 +70,6 @@
         }
         vm.exportChapter = function () {
             try {
-                debugger;
                 vm.serializedChapterForExport = encodeURIComponent(JSON.stringify(vm.chapter));
                 vm.exportedFileName = vm.chapter.getFileName();
             } catch (error) {

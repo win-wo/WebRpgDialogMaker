@@ -7,13 +7,13 @@ app.config(['$compileProvider', function ($compileProvider) {
 app.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
-            when('/edit', {
-                templateUrl: 'public/modules/chapter/index.html',
-                controller: 'EditChapterController',
-                controllerAs: 'EditChapter'
+            when('/chapters/manage', {
+                templateUrl: 'public/modules/chapters/manageChapter.html',
+                controller: 'ManageChapterController',
+                controllerAs: 'ManageChapter'
             }).
             otherwise({
-                redirectTo: '/edit'
+                redirectTo: '/chapters/manage'
             });
     }]);
 
