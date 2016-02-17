@@ -134,7 +134,6 @@ app.config(['$routeProvider',
         }
         vm.exportChapter = function () {
             try {
-                debugger;
                 vm.serializedChapterForExport = encodeURIComponent(JSON.stringify(vm.chapter));
                 vm.exportedFileName = vm.chapter.getFileName();
             } catch (error) {
@@ -172,19 +171,18 @@ app.config(['$routeProvider',
         }
     }
 })();
-app.factory('NotificationsRepository', function(){
-  var NotificationsRepository = {};
+app.factory('NotificationsRepository', function () {
+    var NotificationsRepository = {
+        list: [],
+        add: function (type, message) {
+            NotificationsRepository.list.push({
+                type: type,
+                message: message
+            });
+        }
+    }
 
-  NotificationsRepository.list = [];
-
-  NotificationsRepository.add = function(type, message){
-    NotificationsRepository.list.push({
-        type : type,
-        message : message
-    });
-  };
-
-  return NotificationsRepository;
+    return NotificationsRepository;
 });
 (function () {
     app.controller("NotificationsController", NotificationsController);
