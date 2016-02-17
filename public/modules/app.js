@@ -25,3 +25,8 @@ app.config(['$routeProvider',
         vm.appName = "Project Chaptr";
     }
 })();
+
+//Default namespaces
+app.Data = {};
+app.Models = {};
+app.Utils = {};

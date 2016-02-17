@@ -1,11 +1,11 @@
 (function () {
     app.controller("ManageChapterController", ManageChapterController);
-    ManageChapterController.$inject = ["$location", "Chapter","NotificationsRepository", "Guid"];
+    ManageChapterController.$inject = ["$location"];
 
-    function ManageChapterController($location, Chapter, NotificationsRepository, Guid) {
+    function ManageChapterController($location) {
         var vm = this;
         //dialogs
-        vm.chapter = new Chapter(getFromStorage());
+        vm.chapter = new app.Models.Chapter(getFromStorage());
         vm.dialogModal = {
             id: "#dialogModal",
             dialog: {},
@@ -25,7 +25,7 @@
             var newDialog = {};
             angular.copy(dialog, newDialog);
 
-            newDialog.id = newDialog.id || Guid.newGuid();
+            newDialog.id = newDialog.id || app.Utils.Guid.newGuid();
 
             var index = _.findIndex(vm.chapter.dialogs, { id: newDialog.id });
 
@@ -65,7 +65,7 @@
 
                 reader.readAsText(file);
             } catch (error) {
-                NotificationsRepository.add("danger", "Impossible to import : " + error.message);
+                app.Data.Notifications.add("danger", "Impossible to import : " + error.message);
             }
         }
         vm.exportChapter = function () {
@@ -73,11 +73,11 @@
                 vm.serializedChapterForExport = encodeURIComponent(JSON.stringify(vm.chapter));
                 vm.exportedFileName = vm.chapter.getFileName();
             } catch (error) {
-                NotificationsRepository.add("danger", "Error while exporting : " + error.message);
+                app.Data.Notifications.add("danger", "Error while exporting : " + error.message);
             }
         }
         vm.resetChapter = function(){
-            vm.chapter = new Chapter();
+            vm.chapter = new app.Models.Chapter();
         }
         vm.updateSerializedChapterForVisualisation = function () {
             vm.serializedChapterForVisualisation = JSON.stringify(vm.chapter, undefined, 2);
@@ -96,13 +96,13 @@
         function loadDataAsChapter(data) {
             try {
                 var parsedData = JSON.parse(data);
-                var chapter = new Chapter(parsedData);
+                var chapter = new app.Models.Chapter(parsedData);
 
                 chapter.isValid();
                 vm.chapter = chapter;
                 saveToStorage();
             } catch (error) {
-                NotificationsRepository.add("danger", "File is not valid : " + error.message);
+                app.Data.Notifications.add("danger", "File is not valid : " + error.message);
             }
         }
     }

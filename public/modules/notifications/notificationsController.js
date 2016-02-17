@@ -1,10 +1,10 @@
 (function () {
     app.controller("NotificationsController", NotificationsController);
-    NotificationsController.$inject = ["NotificationsRepository"]
-    function NotificationsController(NotificationsRepository) {
+    
+    function NotificationsController() {
         var vm = this;
 
-        vm.notifications = NotificationsRepository.list;
+        vm.notifications = app.Data.Notifications.list;
         
         vm.removeNotification = function (index) {
             vm.notifications.splice(index, 1);
