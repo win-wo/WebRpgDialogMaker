@@ -1,5 +1,5 @@
 app = angular.module("WebRpgDialogMaker", ["ngRoute"]);
-app.Data = {};
+
 app.config(['$compileProvider', function ($compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|data):/);
 }]);
@@ -8,9 +8,9 @@ app.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
             when('/edit', {
-                templateUrl: 'public/services/edit/index.html',
-                controller: 'EditPageController',
-                controllerAs: 'EditPage'
+                templateUrl: 'public/modules/chapter/index.html',
+                controller: 'EditChapterController',
+                controllerAs: 'EditChapter'
             }).
             otherwise({
                 redirectTo: '/edit'
@@ -23,38 +23,53 @@ app.config(['$routeProvider',
     function AppController() {
         var vm = this;
         vm.appName = "Project Chaptr";
-        
-        vm.chapter
     }
 })();
-app.factory('Notifications', function(){
-  var Notifications = {};
-
-  Notifications.list = [];
-
-  Notifications.add = function(type, message){
-    Notifications.list.push({
-        type : type,
-        message : message
-    });
-  };
-
-  return Notifications;
-});
 (function () {
-    app.controller("EditPageController", EditPageController);
-    EditPageController.$inject = ["$location", "Notifications"];
+    app.factory("Chapter", factory)
+    factory.$inject = ["Guid", "Slug"];
 
-    function EditPageController($location, Notifications) {
+    function factory(Guid, Slug) {
+        function Chapter(data) {
+            if (data) this.DataContructor(data);
+            else this.Constructor();
+        }
+        Chapter.prototype.Constructor = function () {
+            this.id = Guid.newGuid();
+            this.name = null;
+            this.number = null;
+            this.language = null;
+            this.dialogs = [];
+        }
+        Chapter.prototype.DataContructor = function (data) {
+            this.id = data.id;
+            this.name = data.name;
+            this.number = data.number;
+            this.language = data.language;
+            this.dialogs = data.dialogs;
+        }
+        Chapter.prototype.isValid = function () {
+            if (!this.id) throw new Error("Missing id");
+            if (!this.name) throw new Error("Missing name");
+            if (!this.number) throw new Error("Missing number");
+            if (!this.language) throw new Error("Missing language");
+            if (!this.dialogs) throw new Error("Missing dialogs");
+        }
+
+        Chapter.prototype.getFileName = function () {
+            return this.number + "." + this.language + "." + Slug.slugify(this.name) + ".json";
+        }
+        return Chapter;
+    }
+})();
+(function () {
+    app.controller("EditChapterController", EditChapterController);
+    EditChapterController.$inject = ["$location", "Chapter","NotificationsRepository", "Guid"];
+
+    function EditChapterController($location, Chapter, NotificationsRepository, Guid) {
         var vm = this;
         //dialogs
-        vm.chapter = getFromStorage() || {
-            id: generateGuid(),
-            name: null,
-            number: null,
-            language: null,
-            dialogs: []
-        };
+        vm.chapter = new Chapter(getFromStorage());
         vm.dialogModal = {
             id: "#dialogModal",
             dialog: {},
@@ -63,6 +78,7 @@ app.factory('Notifications', function(){
         vm.file = null;
         vm.serializedChapterForExport = null;        
         vm.serializedChapterForVisualisation = null;
+        vm.exportedFileName = null;
         //Dialogs
         vm.showDialogModal = function (dialog) {
             angular.copy(dialog, vm.dialogModal.dialog);
@@ -73,7 +89,7 @@ app.factory('Notifications', function(){
             var newDialog = {};
             angular.copy(dialog, newDialog);
 
-            newDialog.id = newDialog.id || generateGuid();
+            newDialog.id = newDialog.id || Guid.newGuid();
 
             var index = _.findIndex(vm.chapter.dialogs, { id: newDialog.id });
 
@@ -113,32 +129,25 @@ app.factory('Notifications', function(){
 
                 reader.readAsText(file);
             } catch (error) {
-                Notifications.add("danger", "Impossible to import : " + error.message);
+                NotificationsRepository.add("danger", "Impossible to import : " + error.message);
             }
         }
         vm.exportChapter = function () {
             try {
-                if (localStorage.chapter) {
-                    vm.serializedChapterForExport = encodeURIComponent(JSON.stringify(localStorage.chapter));
-                }
+                debugger;
+                vm.serializedChapterForExport = encodeURIComponent(JSON.stringify(vm.chapter));
+                vm.exportedFileName = vm.chapter.getFileName();
             } catch (error) {
-                Notifications.add("danger", "Impossible to export, please save your data first");
+                NotificationsRepository.add("danger", "Error while exporting : " + error.message);
             }
         }
         vm.resetChapter = function(){
-            vm.chapter = {};
+            vm.chapter = new Chapter();
         }
         vm.updateSerializedChapterForVisualisation = function () {
             vm.serializedChapterForVisualisation = JSON.stringify(vm.chapter, undefined, 2);
         }
 
-        function generateGuid() {
-            var guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-            return guid;
-        }
         function getFromStorage() {
             try {
                 return JSON.parse(localStorage.chapter);
@@ -151,31 +160,39 @@ app.factory('Notifications', function(){
         }
         function loadDataAsChapter(data) {
             try {
-                var chapter = JSON.parse(JSON.parse(data));
+                var parsedData = JSON.parse(data);
+                var chapter = new Chapter(parsedData);
 
-                isChapterValid(chapter);
-                localStorage.chapter = data;
+                chapter.isValid();
+                vm.chapter = chapter;
+                saveToStorage();
             } catch (error) {
-                Notifications.add("danger", "File is not valid : " + error.message);
+                NotificationsRepository.add("danger", "File is not valid : " + error.message);
             }
-        }
-        function isChapterValid(chapter) {
-            if (!chapter) throw new Error("Chapter is null");
-            if (!chapter.id) throw new Error("Missing id");
-            if (!chapter.name) throw new Error("Missing name");
-            if (!chapter.number) throw new Error("Missing number");
-            if (!chapter.language) throw new Error("Missing language");
-            if (!chapter.dialogs) throw new Error("Missing dialogs");
         }
     }
 })();
+app.factory('NotificationsRepository', function(){
+  var NotificationsRepository = {};
+
+  NotificationsRepository.list = [];
+
+  NotificationsRepository.add = function(type, message){
+    NotificationsRepository.list.push({
+        type : type,
+        message : message
+    });
+  };
+
+  return NotificationsRepository;
+});
 (function () {
     app.controller("NotificationsController", NotificationsController);
-    NotificationsController.$inject = ["Notifications"]
-    function NotificationsController(Notifications) {
+    NotificationsController.$inject = ["NotificationsRepository"]
+    function NotificationsController(NotificationsRepository) {
         var vm = this;
 
-        vm.notifications = Notifications.list;
+        vm.notifications = NotificationsRepository.list;
         
         vm.removeNotification = function (index) {
             vm.notifications.splice(index, 1);
@@ -191,4 +208,31 @@ app.factory('Notifications', function(){
         var vm = this;
        
     }
+})();
+(function () {
+    app.factory("Guid", function () {
+        return {
+            newGuid: function () {
+                var guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+                return guid;
+            }
+        };
+    })
+})();
+(function () {
+    app.factory("Slug", function () {
+        return {
+            slugify: function (text) {
+                return text.toString().toLowerCase()
+                    .replace(/\s+/g, '-')           // Replace spaces with -
+                    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+                    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+                    .replace(/^-+/, '')             // Trim - from start of text
+                    .replace(/-+$/, '');            // Trim - from end of text
+            }
+        };
+    })
 })();

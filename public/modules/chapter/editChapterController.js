@@ -1,17 +1,11 @@
 (function () {
-    app.controller("EditPageController", EditPageController);
-    EditPageController.$inject = ["$location", "Notifications"];
+    app.controller("EditChapterController", EditChapterController);
+    EditChapterController.$inject = ["$location", "Chapter","NotificationsRepository", "Guid"];
 
-    function EditPageController($location, Notifications) {
+    function EditChapterController($location, Chapter, NotificationsRepository, Guid) {
         var vm = this;
         //dialogs
-        vm.chapter = getFromStorage() || {
-            id: generateGuid(),
-            name: null,
-            number: null,
-            language: null,
-            dialogs: []
-        };
+        vm.chapter = new Chapter(getFromStorage());
         vm.dialogModal = {
             id: "#dialogModal",
             dialog: {},
@@ -20,6 +14,7 @@
         vm.file = null;
         vm.serializedChapterForExport = null;        
         vm.serializedChapterForVisualisation = null;
+        vm.exportedFileName = null;
         //Dialogs
         vm.showDialogModal = function (dialog) {
             angular.copy(dialog, vm.dialogModal.dialog);
@@ -30,7 +25,7 @@
             var newDialog = {};
             angular.copy(dialog, newDialog);
 
-            newDialog.id = newDialog.id || generateGuid();
+            newDialog.id = newDialog.id || Guid.newGuid();
 
             var index = _.findIndex(vm.chapter.dialogs, { id: newDialog.id });
 
@@ -70,32 +65,25 @@
 
                 reader.readAsText(file);
             } catch (error) {
-                Notifications.add("danger", "Impossible to import : " + error.message);
+                NotificationsRepository.add("danger", "Impossible to import : " + error.message);
             }
         }
         vm.exportChapter = function () {
             try {
-                if (localStorage.chapter) {
-                    vm.serializedChapterForExport = encodeURIComponent(JSON.stringify(localStorage.chapter));
-                }
+                debugger;
+                vm.serializedChapterForExport = encodeURIComponent(JSON.stringify(vm.chapter));
+                vm.exportedFileName = vm.chapter.getFileName();
             } catch (error) {
-                Notifications.add("danger", "Impossible to export, please save your data first");
+                NotificationsRepository.add("danger", "Error while exporting : " + error.message);
             }
         }
         vm.resetChapter = function(){
-            vm.chapter = {};
+            vm.chapter = new Chapter();
         }
         vm.updateSerializedChapterForVisualisation = function () {
             vm.serializedChapterForVisualisation = JSON.stringify(vm.chapter, undefined, 2);
         }
 
-        function generateGuid() {
-            var guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-            return guid;
-        }
         function getFromStorage() {
             try {
                 return JSON.parse(localStorage.chapter);
@@ -108,21 +96,15 @@
         }
         function loadDataAsChapter(data) {
             try {
-                var chapter = JSON.parse(JSON.parse(data));
+                var parsedData = JSON.parse(data);
+                var chapter = new Chapter(parsedData);
 
-                isChapterValid(chapter);
-                localStorage.chapter = data;
+                chapter.isValid();
+                vm.chapter = chapter;
+                saveToStorage();
             } catch (error) {
-                Notifications.add("danger", "File is not valid : " + error.message);
+                NotificationsRepository.add("danger", "File is not valid : " + error.message);
             }
-        }
-        function isChapterValid(chapter) {
-            if (!chapter) throw new Error("Chapter is null");
-            if (!chapter.id) throw new Error("Missing id");
-            if (!chapter.name) throw new Error("Missing name");
-            if (!chapter.number) throw new Error("Missing number");
-            if (!chapter.language) throw new Error("Missing language");
-            if (!chapter.dialogs) throw new Error("Missing dialogs");
         }
     }
 })();

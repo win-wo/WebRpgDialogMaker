@@ -6,20 +6,20 @@
     </div>
     <div class="col-sm-6">
         <div class="form-group">
-            <button class="btn btn-primary btn-sm" ng-click="EditPage.importChapter()">
+            <button class="btn btn-primary btn-sm" ng-click="EditChapter.importChapter()">
                 <i class="fa fa-upload"></i> Import
             </button>
-            <button class="btn btn-primary btn-sm" ng-click="EditPage.exportChapter()">
+            <button class="btn btn-primary btn-sm" ng-click="EditChapter.exportChapter()">
                 <i class="fa fa-download"></i> Export
             </button>
-            <button class="btn btn-primary btn-sm" ng-click="EditPage.saveToStorage()"><i class="fa fa-floppy-o"></i> Save
+            <button class="btn btn-primary btn-sm" ng-click="EditChapter.saveToStorage()"><i class="fa fa-floppy-o"></i> Save
             </button>
-            <button class="btn btn-primary btn-sm" ng-click="EditPage.resetChapter()">
+            <button class="btn btn-primary btn-sm" ng-click="EditChapter.resetChapter()">
                 <i class="fa fa-refresh"></i> Reset
             </button>
         </div>
-        <a class="" href="data:text/json;charset=utf-8,{{EditPage.serializedChapterForExport}}" download="{{EditPage.chapter.number}}.{{EditPage.chapter.name}}.{{EditPage.chapter.language}}.json"
-        ng-if="EditPage.exportedData">Download</a>
+        <a class="" href="data:text/json;charset=utf-8,{{EditChapter.serializedChapterForExport}}" download="{{EditChapter.exportedFileName}}"
+        ng-if="EditChapter.serializedChapterForExport" ng-click="EditChapter.serializedChapterForExport = null">Download</a>
     </div>
 </div>
 <div class="row">
@@ -36,19 +36,19 @@
     <div class="col-sm-3">
         <div class="form-group">
             Name :
-            <input type="text" class="form-control" ng-model="EditPage.chapter.name">
+            <input type="text" class="form-control" ng-model="EditChapter.chapter.name">
         </div>
     </div>
     <div class="col-sm-3">
         <div class="form-group">
             Number :
-            <input type="number" class="form-control" ng-model="EditPage.chapter.number">
+            <input type="number" class="form-control" ng-model="EditChapter.chapter.number">
         </div>
     </div>
     <div class="col-sm-3">
         <div class="form-group">
             Language (e.g. en,fr) :
-            <input type="text" class="form-control" ng-model="EditPage.chapter.language">
+            <input type="text" class="form-control" ng-model="EditChapter.chapter.language">
         </div>
     </div>
 </div>
@@ -57,7 +57,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="form-group">
-            <button type="button" class="btn btn-default btn-sm" ng-click="EditPage.showDialogModal()">
+            <button type="button" class="btn btn-default btn-sm" ng-click="EditChapter.showDialogModal()">
                 <i class="fa fa-plus"></i>
             </button>
         </div>
@@ -70,16 +70,16 @@
                 <th>Key</th>
                 <th>Actions</th>
             </tr>
-            <tr ng-repeat="dialog in EditPage.chapter.dialogs">
+            <tr ng-repeat="dialog in EditChapter.chapter.dialogs">
                 <td>{{dialog.number}} - {{dialog.name}}</td>
                 <td>
-                    <button class="btn btn-default btn-sm" ng-click="EditPage.showDialogModal(dialog)">
+                    <button class="btn btn-default btn-sm" ng-click="EditChapter.showDialogModal(dialog)">
                         <i class="fa fa-pencil"></i>
                     </button>
-                    <button class="btn btn-danger btn-sm" ng-click="EditPage.deleteDialog(dialog)">
+                    <button class="btn btn-danger btn-sm" ng-click="EditChapter.deleteDialog(dialog)">
                         <i class="fa fa-times"></i>
                     </button>
-                    <button class="btn btn-default btn-sm" ng-click="EditPage.demoDialog(dialog)">
+                    <button class="btn btn-default btn-sm" ng-click="EditChapter.demoDialog(dialog)">
                         <i class="fa fa-laptop"></i>
                     </button>
                 </td>
@@ -99,13 +99,13 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             Name :
-                            <input type="text" class="form-control" ng-model="EditPage.dialogModal.dialog.name">
+                            <input type="text" class="form-control" ng-model="EditChapter.dialogModal.dialog.name">
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             Number :
-                            <input type="number" class="form-control" ng-model="EditPage.dialogModal.dialog.number">
+                            <input type="number" class="form-control" ng-model="EditChapter.dialogModal.dialog.number">
                         </div>
                     </div>
                 </div>
@@ -117,16 +117,16 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="EditPage.saveDialog(EditPage.dialogModal.dialog)">Save changes</button>
+                <button type="button" class="btn btn-primary" ng-click="EditChapter.saveDialog(EditChapter.dialogModal.dialog)">Save changes</button>
             </div>
         </div>
     </div>
 </div>
 
-<button class="btn btn-default btn-sm" data-toggle="collapse" data-target="#jsonViewer" ng-click="EditPage.updateSerializedChapterForVisualisation()">View JSON</button>
+<button class="btn btn-default btn-sm" data-toggle="collapse" data-target="#jsonViewer" ng-click="EditChapter.updateSerializedChapterForVisualisation()">View JSON</button>
 <div id="jsonViewer" class="collapse">
     <br>
     <pre>
-        {{EditPage.serializedChapterForVisualisation}}
+        {{EditChapter.serializedChapterForVisualisation}}
     </pre>
 </div>
