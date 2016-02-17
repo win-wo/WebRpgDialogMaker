@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-sm-6">
         <div class="form-group">
-            <input type="file" id="toolbar-file-import"/>
+            <input type="file" id="toolbar-file-import" />
         </div>
     </div>
     <div class="col-sm-6">
@@ -12,12 +12,14 @@
             <button class="btn btn-primary btn-sm" ng-click="EditPage.exportChapter()">
                 <i class="fa fa-download"></i> Export
             </button>
-            <button class="btn btn-primary btn-sm" ng-click="EditPage.saveToStorage()"><i class="fa fa-floppy-o"></i></button>
+            <button class="btn btn-primary btn-sm" ng-click="EditPage.saveToStorage()"><i class="fa fa-floppy-o"></i> Save
+            </button>
             <button class="btn btn-primary btn-sm" ng-click="EditPage.resetChapter()">
-                <i class="fa fa-refresh"></i>
+                <i class="fa fa-refresh"></i> Reset
             </button>
         </div>
-        <a class="" href="data:text/json;charset=utf-8,{{EditPage.serializedChapterForExport}}" download="{{EditPage.chapter.number}}.{{EditPage.chapter.name}}.{{EditPage.chapter.language}}.json" ng-if="EditPage.exportedData">Download</a>
+        <a class="" href="data:text/json;charset=utf-8,{{EditPage.serializedChapterForExport}}" download="{{EditPage.chapter.number}}.{{EditPage.chapter.name}}.{{EditPage.chapter.language}}.json"
+        ng-if="EditPage.exportedData">Download</a>
     </div>
 </div>
 <div class="row">

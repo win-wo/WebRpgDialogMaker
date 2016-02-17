@@ -170,14 +170,6 @@ app.factory('Notifications', function(){
     }
 })();
 (function () {
-    app.controller("ToolbarController", ToolbarController);
-    
-    function ToolbarController() {
-        var vm = this;
-       
-    }
-})();
-(function () {
     app.controller("NotificationsController", NotificationsController);
     NotificationsController.$inject = ["Notifications"]
     function NotificationsController(Notifications) {
@@ -191,3 +183,12 @@ app.factory('Notifications', function(){
     }
 })();
 
+
+(function () {
+    app.controller("ToolbarController", ToolbarController);
+    
+    function ToolbarController() {
+        var vm = this;
+       
+    }
+})();
