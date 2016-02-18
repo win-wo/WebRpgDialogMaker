@@ -150,6 +150,26 @@ app.Data.Notifications = {
         });
     }
 };
+app.Models.Dialog = (function(){
+    function Dialog(data){
+        if (data) this.DataContructor(data);
+        else this.Constructor();
+    }
+    Dialog.prototype.Constructor = function () {
+        this.id = app.Utils.Guid.newGuid();
+        this.name = null;
+        this.number = null;
+        this.messages = [];
+    }
+    Dialog.prototype.DataContructor = function (data) {
+        this.id = data.id;
+        this.name = data.name;
+        this.number = data.number;
+        this.messages = data.messages;
+    }
+    
+    return Dialog;
+})();
 (function(){
     app.controller("DialogListController", DialogListController);
     
@@ -163,15 +183,12 @@ app.Data.Notifications = {
         };
         
         vm.showDialogModal = function (dialog) {
-            angular.copy(dialog, vm.dialogModal.dialog);
+            vm.dialogModal.dialog = new app.Models.Dialog(dialog);
             $(vm.dialogModal.id).modal();
         }
 
         vm.saveDialog = function (dialog) {
-            var newDialog = {};
-            angular.copy(dialog, newDialog);
-
-            newDialog.id = newDialog.id || app.Utils.Guid.newGuid();
+            var newDialog = new app.Models.Dialog(dialog);
 
             var index = _.findIndex(vm.chapterData.chapter.dialogs, { id: newDialog.id });
 
@@ -184,9 +201,14 @@ app.Data.Notifications = {
 
             $(vm.dialogModal.id).modal("hide");
         }
-        vm.selectDialog = function (dialog) {
-            vm.updateDialogWindowVisible
-            angular.copy(dialog, vm.dialogModal.dialog);
+        vm.duplicateDialog = function(dialog){
+            debugger;
+            dialog.id = app.Utils.Guid.newGuid();
+            var newDialog = new app.Models.Dialog(dialog);  
+            
+            var index = _.findIndex(vm.chapterData.chapter.dialogs, { id: newDialog.id }); 
+            
+            vm.chapterData.chapter.dialogs.splice(index, 0, newDialog);         
         }
         vm.deleteDialog = function (dialog) {
             _.remove(vm.chapterData.chapter.dialogs, { id: dialog.id });
