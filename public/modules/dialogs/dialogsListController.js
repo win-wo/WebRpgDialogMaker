@@ -1,62 +1,74 @@
-(function(){
+(function () {
     app.controller("DialogListController", DialogListController);
-    
-    function DialogListController(){
+
+    function DialogListController() {
         var vm = this;
         vm.chapterData = app.Data.Chapter;
-        vm.newMessage = {};
         vm.dialogModal = {
             id: "#dialogModal",
             dialog: {},
+            newMessage: {}
         };
+
+        var dialogRepo = new app.Utils.Repo(vm.chapterData.chapter.dialogs);
+        var messageRepo = null;
         
-        vm.showDialogModal = function (dialog) {
-            vm.dialogModal.dialog = new app.Models.Dialog(dialog);
+        //dialog
+        vm.showDialogModal = function (dialogVm) {
+            vm.dialogModal.dialog = new app.Models.Dialog(dialogVm);
+            messageRepo = new app.Utils.Repo(vm.dialogModal.dialog.messages);
             $(vm.dialogModal.id).modal();
         }
-
-        vm.saveDialog = function (dialog) {
-            var newDialog = new app.Models.Dialog(dialog);
-
-            var index = _.findIndex(vm.chapterData.chapter.dialogs, { id: newDialog.id });
-
-            if (index != -1) {
-                vm.chapterData.chapter.dialogs[index] = newDialog;
-            }
-            else {
-                vm.chapterData.chapter.dialogs.push(newDialog);
-            }
-
+        vm.saveDialog = function (dialogVm) {
+            var dialog = new app.Models.Dialog(dialogVm);
+            dialogRepo.save(dialog);
+            vm.dialogModal.dialog = {};
             $(vm.dialogModal.id).modal("hide");
         }
-        vm.duplicateDialog = function(dialog){
-            debugger;
-            dialog.id = app.Utils.Guid.newGuid();
-            var newDialog = new app.Models.Dialog(dialog);  
-            
-            var index = _.findIndex(vm.chapterData.chapter.dialogs, { id: newDialog.id }); 
-            
-            vm.chapterData.chapter.dialogs.splice(index, 0, newDialog);         
+        vm.duplicateDialog = function (dialogVm) {
+            var dialog = new app.Models.Dialog(dialogVm);
+            dialogRepo.duplicate(dialog)
         }
-        vm.deleteDialog = function (dialog) {
-            _.remove(vm.chapterData.chapter.dialogs, { id: dialog.id });
+        vm.moveUpDialog = function (dialogVm) {
+            var dialog = new app.Models.Dialog(dialogVm);
+            dialogRepo.moveUp(dialog);
+        }
+        vm.moveDownDialog = function (dialogVm) {
+            var dialog = new app.Models.Dialog(dialogVm);
+            dialogRepo.moveDown(dialog);
+        }
+        vm.removeDialog = function (dialogVm) {
+            var dialog = new app.Models.Dialog(dialogVm);
+            dialogRepo.remove(dialog)
         }
         vm.demoDialog = function (dialog) {
-
+            //todo
         }
         
         //messages
-        vm.copyIdMessage = function(message){
-            
+        vm.saveMessage = function () {
+            var message = new app.Models.Message(vm.dialogModal.dialog.newMessage);
+            messageRepo.save(message);
+            vm.dialogModal.dialog.newMessage = {};
         }
-        vm.duplicateMessage = function(message){
-            
+        vm.selectMessage = function (messageVm) {
+            vm.dialogModal.dialog.newMessage = new app.Models.Message(messageVm);
         }
-        vm.moveUpMessage = function(message){
-            
+        vm.duplicateMessage = function (messageVm) {
+            var message = new app.Models.Message(messageVm);
+            messageRepo.duplicate(message);
         }
-        vm.moveDownMessage = function(message){
-            
+        vm.moveUpMessage = function (messageVm) {
+            var message = new app.Models.Message(messageVm);
+            messageRepo.moveUp(message);
+        }
+        vm.moveDownMessage = function (messageVm) {
+            var message = new app.Models.Message(messageVm);
+            messageRepo.moveDown(message);
+        }
+        vm.removeMessage = function (messageVm) {
+            var message = new app.Models.Message(messageVm);
+            messageRepo.remove(message);
         }
     }
 })();

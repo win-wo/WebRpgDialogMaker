@@ -25,71 +25,76 @@
                         <hr>
                     </div>
                 </div>
-                <h4>Messages</h4>
+                <h4>Messages <small>{{DialogList.dialogModal.dialog.newMessage.id}}</small></h4>
                 <div class="row">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            Id
-                            <input type="text" class="form-control" ng-model="DialogList.newMessage.id" readonly>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-
+                    <div class="col-sm-4">
                         <div class="form-group">
                             Character
-                            <input type="text" class="form-control" ng-model="DialogList.newMessage.character">
+                            <input type="text" class="form-control" ng-model="DialogList.dialogModal.dialog.newMessage.character">
                         </div>
                     </div>
-                    <div class="col-sm-4">
-
+                    <div class="col-sm-3">
                         <div class="form-group">
-                            Choices <small>(optionnal) each line is a new choice</small>
-                            <textarea class="form-control" ng-model="DialogList.newMessage.choices" placeholder="Choices 1 text : 123456"></textarea>
+                            Text
+                            <textarea class="form-control" ng-model="DialogList.dialogModal.dialog.newMessage.text"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            Choices <small>(optionnal)</small>
+                            <textarea class="form-control" ng-model="DialogList.dialogModal.dialog.newMessage.choices" placeholder="Choices 1 text : 123456"></textarea>
                         </div>
                     </div>
                     <div class="col-sm-2">
-                        <button class="btn btn-default btn-sm" ng-if="!DialogList.newMessage.id">
+                        <div class="form-group">
+                            <button class="btn btn-default btn-sm" ng-if="!DialogList.dialogModal.dialog.newMessage.id" ng-click="DialogList.saveMessage(DialogList.dialogModal.dialog.newMessage)">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <button class="btn btn-default btn-sm" ng-if="DialogList.newMessage.id">
+                        <button class="btn btn-default btn-sm" ng-if="DialogList.dialogModal.dialog.newMessage.id" ng-click="DialogList.saveMessage(DialogList.dialogModal.dialog.newMessage)">
                             <i class="fa fa-save"></i>
                         </button>
+                        </div>
                     </div>
                 </div>
                 <table class="table table-response">
                     <tr>
                         <th>Id</th>
                         <th>Character</th>
+                        <th>Text</th>
                         <th>Choices</th>
                         <th>Actions</th>
                     </tr>
                     <tr ng-repeat="message in DialogList.dialogModal.dialog.messages">
-                        <td>{{message.id}}</td>
+                        <td><input type="text" value="{{message.id}}" readonly></td>
                         <td>{{message.character}}</td>
+                        <td>{{message.text}}</td>
                         <td>{{message.choices}}</td>
                         <td>
-                            <button class="btn btn-default btn-sm" ng-click="DialogList.copyIdMessage(message)">
-                                <i class="fa fa-copy"></i>
-                            </button>    
-                            <button class="btn btn-default btn-sm" ng-click="DialogList.duplicateMessage(message)">
-                                <i class="fa fa-duplicate"></i>
-                            </button>    
-                            </button>    
+                            <button class="btn btn-warning btn-sm" ng-click="DialogList.selectMessage(message)">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                            <button class="btn btn-warning btn-sm" ng-click="DialogList.duplicateMessage(message)">
+                                <i class="fa fa-clone"></i>
+                            </button>
+                            </button>
                             <button class="btn btn-default btn-sm" ng-click="DialogList.moveUpMessage(message)">
                                 <i class="fa fa-arrow-up"></i>
-                            </button>    
-                            </button>    
+                            </button>
+                            </button>
                             <button class="btn btn-default btn-sm" ng-click="DialogList.moveDownMessage(message)">
                                 <i class="fa fa-arrow-down"></i>
-                            </button>    
+                            </button>
+                            <button class="btn btn-danger btn-sm" ng-click="DialogList.removeMessage(message)">
+                                <i class="fa fa-times"></i>
+                            </button>
                         </td>
                     </tr>
                 </table>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" ng-click="DialogList.saveDialog(DialogList.dialogModal.dialog)">Save changes</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="DialogList.saveDialog(DialogList.dialogModal.dialog)">Save changes</button>
+            </div>
         </div>
     </div>
 </div>
