@@ -7,13 +7,13 @@ app.config(['$compileProvider', function ($compileProvider) {
 app.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
-            when('/chapters/manage', {
-                templateUrl: 'public/modules/chapters/manageChapter.html',
-                controller: 'ManageChapterController',
-                controllerAs: 'ManageChapter'
+            when('/chapter', {
+                templateUrl: 'public/modules/chapters/index.html',
+                controller: 'ChapterPageController',
+                controllerAs: 'ChapterPage'
             }).
             otherwise({
-                redirectTo: '/chapters/manage'
+                redirectTo: '/chapter'
             });
     }]);
 
@@ -63,57 +63,21 @@ app.Models.Chapter = (function () {
     return Chapter;
 })();
 (function () {
-    app.controller("ManageChapterController", ManageChapterController);
-    ManageChapterController.$inject = ["$location"];
+    app.controller("ChapterPageController", ChapterPageController);
+    ChapterPageController.$inject = ["$location"];
 
-    function ManageChapterController($location) {
+    function ChapterPageController($location) {
         var vm = this;
         //dialogs
         vm.chapterData = app.Data.Chapter;
         vm.chapterData.chapter = new app.Models.Chapter(getFromStorage());
-        
-        vm.dialogModal = {
-            id: "#dialogModal",
-            dialog: {},
-        };
+                
         //export/import
         vm.file = null;
         vm.serializedChapterForExport = null;        
         vm.serializedChapterForVisualisation = null;
         vm.exportedFileName = null;
-        //Dialogs
-        vm.showDialogModal = function (dialog) {
-            angular.copy(dialog, vm.dialogModal.dialog);
-            $(vm.dialogModal.id).modal();
-        }
-
-        vm.saveDialog = function (dialog) {
-            var newDialog = {};
-            angular.copy(dialog, newDialog);
-
-            newDialog.id = newDialog.id || app.Utils.Guid.newGuid();
-
-            var index = _.findIndex(vm.chapterData.chapter.dialogs, { id: newDialog.id });
-
-            if (index != -1) {
-                vm.chapterData.chapter.dialogs[index] = newDialog;
-            }
-            else {
-                vm.chapterData.chapter.dialogs.push(newDialog);
-            }
-
-            $(vm.dialogModal.id).modal("hide");
-        }
-        vm.selectDialog = function (dialog) {
-            vm.updateDialogWindowVisible
-            angular.copy(dialog, vm.dialogModal.dialog);
-        }
-        vm.deleteDialog = function (dialog) {
-            _.remove(vm.chapterData.chapter.dialogs, { id: dialog.id });
-        }
-        vm.demoDialog = function (dialog) {
-
-        }
+        
         //Import Export
         vm.saveToStorage = function () {
             saveToStorage();
@@ -167,6 +131,7 @@ app.Models.Chapter = (function () {
                 chapter.isValid();
                 vm.chapterData.chapter = chapter;
                 saveToStorage();
+                location.reload();
             } catch (error) {
                 app.Data.Notifications.add("danger", "File is not valid : " + error.message);
             }
@@ -185,6 +150,52 @@ app.Data.Notifications = {
         });
     }
 };
+(function(){
+    app.controller("DialogListController", DialogListController);
+    
+    function DialogListController(){
+        var vm = this;
+        vm.chapterData = app.Data.Chapter;
+            
+        vm.dialogModal = {
+            id: "#dialogModal",
+            dialog: {},
+        };
+        
+        vm.showDialogModal = function (dialog) {
+            angular.copy(dialog, vm.dialogModal.dialog);
+            $(vm.dialogModal.id).modal();
+        }
+
+        vm.saveDialog = function (dialog) {
+            var newDialog = {};
+            angular.copy(dialog, newDialog);
+
+            newDialog.id = newDialog.id || app.Utils.Guid.newGuid();
+
+            var index = _.findIndex(vm.chapterData.chapter.dialogs, { id: newDialog.id });
+
+            if (index != -1) {
+                vm.chapterData.chapter.dialogs[index] = newDialog;
+            }
+            else {
+                vm.chapterData.chapter.dialogs.push(newDialog);
+            }
+
+            $(vm.dialogModal.id).modal("hide");
+        }
+        vm.selectDialog = function (dialog) {
+            vm.updateDialogWindowVisible
+            angular.copy(dialog, vm.dialogModal.dialog);
+        }
+        vm.deleteDialog = function (dialog) {
+            _.remove(vm.chapterData.chapter.dialogs, { id: dialog.id });
+        }
+        vm.demoDialog = function (dialog) {
+
+        }
+    }
+})();
 (function () {
     app.controller("NotificationsController", NotificationsController);
     
@@ -200,6 +211,14 @@ app.Data.Notifications = {
 })();
 
 
+(function () {
+    app.controller("ToolbarController", ToolbarController);
+    
+    function ToolbarController() {
+        var vm = this;
+       
+    }
+})();
 app.Utils.Guid = (function () {
     function Guid() { }
     
@@ -224,12 +243,4 @@ app.Utils.Slug = (function () {
             .replace(/-+$/, '');            // Trim - from end of text
     }
     return Slug;
-})();
-(function () {
-    app.controller("ToolbarController", ToolbarController);
-    
-    function ToolbarController() {
-        var vm = this;
-       
-    }
 })();

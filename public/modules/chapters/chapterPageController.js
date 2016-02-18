@@ -1,55 +1,19 @@
 (function () {
-    app.controller("ManageChapterController", ManageChapterController);
-    ManageChapterController.$inject = ["$location"];
+    app.controller("ChapterPageController", ChapterPageController);
+    ChapterPageController.$inject = ["$location"];
 
-    function ManageChapterController($location) {
+    function ChapterPageController($location) {
         var vm = this;
         //dialogs
         vm.chapterData = app.Data.Chapter;
         vm.chapterData.chapter = new app.Models.Chapter(getFromStorage());
-        
-        vm.dialogModal = {
-            id: "#dialogModal",
-            dialog: {},
-        };
+                
         //export/import
         vm.file = null;
         vm.serializedChapterForExport = null;        
         vm.serializedChapterForVisualisation = null;
         vm.exportedFileName = null;
-        //Dialogs
-        vm.showDialogModal = function (dialog) {
-            angular.copy(dialog, vm.dialogModal.dialog);
-            $(vm.dialogModal.id).modal();
-        }
-
-        vm.saveDialog = function (dialog) {
-            var newDialog = {};
-            angular.copy(dialog, newDialog);
-
-            newDialog.id = newDialog.id || app.Utils.Guid.newGuid();
-
-            var index = _.findIndex(vm.chapterData.chapter.dialogs, { id: newDialog.id });
-
-            if (index != -1) {
-                vm.chapterData.chapter.dialogs[index] = newDialog;
-            }
-            else {
-                vm.chapterData.chapter.dialogs.push(newDialog);
-            }
-
-            $(vm.dialogModal.id).modal("hide");
-        }
-        vm.selectDialog = function (dialog) {
-            vm.updateDialogWindowVisible
-            angular.copy(dialog, vm.dialogModal.dialog);
-        }
-        vm.deleteDialog = function (dialog) {
-            _.remove(vm.chapterData.chapter.dialogs, { id: dialog.id });
-        }
-        vm.demoDialog = function (dialog) {
-
-        }
+        
         //Import Export
         vm.saveToStorage = function () {
             saveToStorage();
@@ -103,6 +67,7 @@
                 chapter.isValid();
                 vm.chapterData.chapter = chapter;
                 saveToStorage();
+                location.reload();
             } catch (error) {
                 app.Data.Notifications.add("danger", "File is not valid : " + error.message);
             }

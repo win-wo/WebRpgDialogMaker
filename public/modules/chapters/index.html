@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <input type="file" id="toolbar-file-import" />
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.importChapter()">
+                <i class="fa fa-upload"></i> Import
+            </button>
+            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.exportChapter()">
+                <i class="fa fa-download"></i> Export
+            </button>
+            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.saveToStorage()"><i class="fa fa-floppy-o"></i> Save
+            </button>
+            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.resetChapter()">
+                <i class="fa fa-refresh"></i> Reset
+            </button>
+        </div>
+        <a class="" href="data:text/json;charset=utf-8,{{ChapterPage.serializedChapterForExport}}" download="{{ChapterPage.exportedFileName}}"
+        ng-if="ChapterPage.serializedChapterForExport" ng-click="ChapterPage.serializedChapterForExport = null">Download</a>
+    </div>
+</div>
+<h2>Chapter</h2>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="form-group">
+            Name :
+            <input type="text" class="form-control" ng-model="ChapterPage.chapterData.chapter.name">
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            Number :
+            <input type="number" class="form-control" ng-model="ChapterPage.chapterData.chapter.number">
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            Language (e.g. en,fr) :
+            <input type="text" class="form-control" ng-model="ChapterPage.chapterData.chapter.language">
+        </div>
+    </div>
+</div>
+<hr>
+
+<button class="btn btn-default btn-sm" data-toggle="collapse" data-target="#jsonViewer" ng-click="ChapterPage.updateSerializedChapterForVisualisation()">View JSON</button>
+<div id="jsonViewer" class="collapse">
+    <br>
+    <pre>
+        {{ChapterPage.serializedChapterForVisualisation}}
+    </pre>
+</div>
+
+<div ng-include="'public/modules/dialogs/dialogList.html'"></div>

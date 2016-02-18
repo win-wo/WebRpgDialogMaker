@@ -1,0 +1,39 @@
+<div ng-controller="DialogListController as DialogList">
+    <h3>Dialogs</h3>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <button type="button" class="btn btn-default btn-sm" ng-click="DialogList.showDialogModal()">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-responsive">
+                <tr>
+                    <th>Key</th>
+                    <th>Actions</th>
+                </tr>
+                <tr ng-repeat="dialog in DialogList.chapterData.chapter.dialogs">
+                    <td>{{dialog.number}} - {{dialog.name}}</td>
+                    <td>
+                        <button class="btn btn-default btn-sm" ng-click="DialogList.showDialogModal(dialog)">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" ng-click="DialogList.deleteDialog(dialog)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                        <button class="btn btn-default btn-sm" ng-click="DialogList.demoDialog(dialog)">
+                            <i class="fa fa-laptop"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <div ng-include="'public/modules/dialogs/dialogModal.html'"></div>
+</div>
