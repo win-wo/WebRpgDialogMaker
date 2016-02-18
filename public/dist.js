@@ -216,13 +216,16 @@ app.Models.Dialog = (function () {
         
         //messages
         vm.saveMessage = function () {
-            debugger;
             var message = new app.Models.Message(vm.dialogModal.dialog.newMessage);
             messageRepo.save(message);
             vm.dialogModal.dialog.newMessage = {};
         }
         vm.selectMessage = function (messageVm) {
             vm.dialogModal.dialog.newMessage = new app.Models.Message(messageVm);
+        }
+        vm.selectMessageById = function (id) {
+            var message = messageRepo.get(id);
+            vm.dialogModal.dialog.newMessage = message;
         }
         vm.duplicateMessage = function (messageVm) {
             var message = new app.Models.Message(messageVm);
@@ -248,35 +251,36 @@ app.Models.Message = (function () {
             this.id = vm.id || app.Utils.Guid.newGuid();
             this.character = vm.character;
             this.text = vm.text;
-            this.choices = this.parseChoices(vm.choices);
+            this.choicesText = vm.choicesText;
+            this.choices = this.parseChoices(this.choicesText);
         }
         else {
             this.id = app.Utils.Guid.newGuid();
             this.character = null;
             this.text = null;
+            this.choicesText = null;
             this.choices = null;
-            this.character = null;
         }
     }
 
     Message.prototype.parseChoices = function (stringChoices) {
-        var that = this;
-        this.choices = [];
+        var choices = [];
         try {
             var lines = stringChoices.split("\n");
 
             _.forEach(lines, function (line) {
                 var splittedLine = line.split("|");
                 if (splittedLine[0] && splittedLine[1]) {
-                    that.choices.push({
-                        choice: splittedLine[0],
-                        id : splittedLine[1]
+                    choices.push({
+                        text: splittedLine[0],
+                        id: splittedLine[1]
                     })
                 }
             });
         } catch (error) {
             //ignore
         }
+        return choices;
     }
     return Message;
 })();
@@ -321,7 +325,7 @@ app.Utils.Repo = (function () {
     }
 
     Repo.prototype.save = function (entity) {
-        var index = _.findIndex(this.items, { id: entity.id });
+        var index = this.getIndex(entity.id);
 
         if (index != -1) {
             this.items[index] = entity;
@@ -331,21 +335,24 @@ app.Utils.Repo = (function () {
         }
     }
     Repo.prototype.duplicate = function (entity) {
-        var index = _.findIndex(this.items, { id: entity.id });
+        var index = this.getIndex(entity.id);
         entity.id = app.Utils.Guid.newGuid();
         this.items.splice(index, 0, entity);
     }
     Repo.prototype.remove = function (entity) {
         _.remove(this.items, { id: entity.id });
     }
-    Repo.prototype.get = function () {
-
+    Repo.prototype.get = function (id) {
+        return _.find(this.items, { id: id });
+    }
+    Repo.prototype.getIndex = function (id) {
+        return _.findIndex(this.items, { id: id });
     }
     Repo.prototype.getAll = function () {
-
+        return this.items;
     }
     Repo.prototype.moveUp = function (entity) {
-        var index = _.findIndex(this.items, { id: entity.id });
+        var index = this.getIndex(entity.id);
         if (index != 0) {
             var messageToMoveUp = this.items[index];
             var messageToMoveDown = this.items[index - 1]
@@ -356,7 +363,7 @@ app.Utils.Repo = (function () {
 
     }
     Repo.prototype.moveDown = function (entity) {
-        var index = _.findIndex(this.items, { id: entity.id });
+        var index = this.getIndex(entity.id);
         if (index != this.items.length - 1) {
             var messageToMoveDown = this.items[index]
             var messageToMoveUp = this.items[index + 1];

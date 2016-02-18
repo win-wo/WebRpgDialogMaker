@@ -47,13 +47,16 @@
         
         //messages
         vm.saveMessage = function () {
-            debugger;
             var message = new app.Models.Message(vm.dialogModal.dialog.newMessage);
             messageRepo.save(message);
             vm.dialogModal.dialog.newMessage = {};
         }
         vm.selectMessage = function (messageVm) {
             vm.dialogModal.dialog.newMessage = new app.Models.Message(messageVm);
+        }
+        vm.selectMessageById = function (id) {
+            var message = messageRepo.get(id);
+            vm.dialogModal.dialog.newMessage = message;
         }
         vm.duplicateMessage = function (messageVm) {
             var message = new app.Models.Message(messageVm);

@@ -42,7 +42,7 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             Choices <small>(optionnal)</small>
-                            <textarea class="form-control" ng-model="DialogList.dialogModal.dialog.newMessage.choices" placeholder="Choices 1 text : 123456"></textarea>
+                            <textarea class="form-control" ng-model="DialogList.dialogModal.dialog.newMessage.choicesText" placeholder="I am your father | fe9d8e85-6167-442d-a51e-9bc5ce961a82"></textarea>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -68,7 +68,11 @@
                         <td><input type="text" value="{{message.id}}" readonly></td>
                         <td>{{message.character}}</td>
                         <td>{{message.text}}</td>
-                        <td>{{message.choices}}</td>
+                        <td>
+                            <a href="" ng-repeat="choice in message.choices" ng-click="DialogList.selectMessageById(choice.id)">
+                                {{choice.text}}
+                            </a>
+                        </td>
                         <td>
                             <button class="btn btn-warning btn-sm" ng-click="DialogList.selectMessage(message)">
                                 <i class="fa fa-pencil"></i>
