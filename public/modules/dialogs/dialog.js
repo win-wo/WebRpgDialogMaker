@@ -1,7 +1,7 @@
 app.Models.Dialog = (function () {
     function Dialog(vm) {
         if (vm) {
-            this.id = vm.id;
+            this.id = vm.id || app.Utils.Guid.newGuid();
             this.name = vm.name;
             this.number = vm.number;
             this.messages = vm.messages;

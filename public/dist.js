@@ -153,7 +153,7 @@ app.Data.Notifications = {
 app.Models.Dialog = (function () {
     function Dialog(vm) {
         if (vm) {
-            this.id = vm.id;
+            this.id = vm.id || app.Utils.Guid.newGuid();
             this.name = vm.name;
             this.number = vm.number;
             this.messages = vm.messages;
@@ -216,6 +216,7 @@ app.Models.Dialog = (function () {
         
         //messages
         vm.saveMessage = function () {
+            debugger;
             var message = new app.Models.Message(vm.dialogModal.dialog.newMessage);
             messageRepo.save(message);
             vm.dialogModal.dialog.newMessage = {};
@@ -244,7 +245,7 @@ app.Models.Dialog = (function () {
 app.Models.Message = (function () {
     function Message(vm) {
         if (vm) {
-            this.id = vm.id;
+            this.id = vm.id || app.Utils.Guid.newGuid();
             this.character = vm.character;
             this.text = vm.text;
             this.choices = this.parseChoices(vm.choices);
@@ -257,12 +258,43 @@ app.Models.Message = (function () {
             this.character = null;
         }
     }
-    
-    Message.prototype.parseChoices = function(stringChoices){
-        this.choices = {};
+
+    Message.prototype.parseChoices = function (stringChoices) {
+        var that = this;
+        this.choices = [];
+        try {
+            var lines = stringChoices.split("\n");
+
+            _.forEach(lines, function (line) {
+                var splittedLine = line.split("|");
+                if (splittedLine[0] && splittedLine[1]) {
+                    that.choices.push({
+                        choice: splittedLine[0],
+                        id : splittedLine[1]
+                    })
+                }
+            });
+        } catch (error) {
+            //ignore
+        }
     }
     return Message;
 })();
+(function () {
+    app.controller("NotificationsController", NotificationsController);
+    
+    function NotificationsController() {
+        var vm = this;
+
+        vm.notifications = app.Data.Notifications.data;
+        
+        vm.removeNotification = function (index) {
+            vm.notifications.splice(index, 1);
+        }
+    }
+})();
+
+
 (function () {
     app.controller("ToolbarController", ToolbarController);
     
@@ -348,17 +380,3 @@ app.Utils.Slug = (function () {
     }
     return Slug;
 })();
-(function () {
-    app.controller("NotificationsController", NotificationsController);
-    
-    function NotificationsController() {
-        var vm = this;
-
-        vm.notifications = app.Data.Notifications.data;
-        
-        vm.removeNotification = function (index) {
-            vm.notifications.splice(index, 1);
-        }
-    }
-})();
-

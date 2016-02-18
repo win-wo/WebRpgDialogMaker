@@ -47,6 +47,7 @@
         
         //messages
         vm.saveMessage = function () {
+            debugger;
             var message = new app.Models.Message(vm.dialogModal.dialog.newMessage);
             messageRepo.save(message);
             vm.dialogModal.dialog.newMessage = {};
