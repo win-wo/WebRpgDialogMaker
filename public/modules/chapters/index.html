@@ -6,20 +6,22 @@
     </div>
     <div class="col-sm-6">
         <div class="form-group">
-            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.importChapter()">
+            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.importChapter()" title="Import the file selected into the memory of the app">
                 <i class="fa fa-upload"></i> Import
             </button>
-            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.exportChapter()">
+            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.exportChapter()" ng-if="!ChapterPage.serializedChapterForExport"
+            title="Export the chapter into a *.json file">
                 <i class="fa fa-download"></i> Export
             </button>
-            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.saveToStorage()"><i class="fa fa-floppy-o"></i> Save
+            <a class="btn btn-primary btn-sm" href="data:text/json;charset=utf-8,{{ChapterPage.serializedChapterForExport}}" download="{{ChapterPage.exportedFileName}}"
+            ng-if="ChapterPage.serializedChapterForExport" ng-click="ChapterPage.serializedChapterForExport = null">Download</a>
+            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.saveToStorage()" title="Save the chapter info into the memory of the browser">
+                <i class="fa fa-floppy-o"></i> Save
             </button>
-            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.resetChapter()">
+            <button class="btn btn-primary btn-sm" ng-click="ChapterPage.resetChapter()" title="Reset the memory of the browser">
                 <i class="fa fa-refresh"></i> Reset
             </button>
         </div>
-        <a class="" href="data:text/json;charset=utf-8,{{ChapterPage.serializedChapterForExport}}" download="{{ChapterPage.exportedFileName}}"
-        ng-if="ChapterPage.serializedChapterForExport" ng-click="ChapterPage.serializedChapterForExport = null">Download</a>
     </div>
 </div>
 <hr>

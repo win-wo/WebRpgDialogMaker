@@ -19,23 +19,23 @@
                 <tr ng-repeat="dialog in DialogList.chapterData.chapter.dialogs">
                     <td>{{dialog.number}} - {{dialog.name}}</td>
                     <td>
-                        <button class="btn btn-warning btn-sm" ng-click="DialogList.showDialogModal(dialog)">
+                        <button class="btn btn-warning btn-sm" ng-click="DialogList.showDialogModal(dialog)" title="Edit the current dialog">
                             <i class="fa fa-pencil"></i>
                         </button>
-                        <button class="btn btn-warning btn-sm" ng-click="DialogList.duplicateDialog(dialog)">
+                        <button class="btn btn-warning btn-sm" ng-click="DialogList.duplicateDialog(dialog)" title="Duplicate the current dialog">
                             <i class="fa fa-copy"></i>
                         </button>
-                        <button class="btn btn-default btn-sm" ng-click="DialogList.moveUpDialog(dialog)">
+                        <button class="btn btn-default btn-sm" ng-click="DialogList.moveUpDialog(dialog)" title="Move up the current dialog">
                             <i class="fa fa-arrow-up"></i>
                         </button>
                         </button>
-                        <button class="btn btn-default btn-sm" ng-click="DialogList.moveDownDialog(dialog)">
+                        <button class="btn btn-default btn-sm" ng-click="DialogList.moveDownDialog(dialog)" title="Move down the current dialog">
                             <i class="fa fa-arrow-down"></i>
                         </button>
-                        <button class="btn btn-danger btn-sm" ng-click="DialogList.removeDialog(dialog)">
+                        <button class="btn btn-danger btn-sm" ng-click="DialogList.removeDialog(dialog)" title="Remove the current dialog">
                             <i class="fa fa-times"></i>
                         </button>
-                        <button class="btn btn-success btn-sm" ng-click="DialogList.demoDialog(dialog)">
+                        <button class="btn btn-success btn-sm" ng-click="DialogList.demoDialog(dialog)" title="Run the current dialog in the demo viewer">
                             <i class="fa fa-laptop"></i>
                         </button>
                     </td>

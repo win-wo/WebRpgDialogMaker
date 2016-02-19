@@ -47,12 +47,14 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <button class="btn btn-default btn-sm" ng-if="!DialogList.dialogModal.dialog.newMessage.id" ng-click="DialogList.saveMessage(DialogList.dialogModal.dialog.newMessage)">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <button class="btn btn-default btn-sm" ng-if="DialogList.dialogModal.dialog.newMessage.id" ng-click="DialogList.saveMessage(DialogList.dialogModal.dialog.newMessage)">
-                            <i class="fa fa-save"></i>
-                        </button>
+                            <button class="btn btn-default btn-sm" ng-if="!DialogList.dialogModal.dialog.newMessage.id" ng-click="DialogList.saveMessage(DialogList.dialogModal.dialog.newMessage)"
+                            title="Add this message">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                            <button class="btn btn-default btn-sm" ng-if="DialogList.dialogModal.dialog.newMessage.id" ng-click="DialogList.saveMessage(DialogList.dialogModal.dialog.newMessage)"
+                            title="Save this message">
+                                <i class="fa fa-save"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -65,7 +67,9 @@
                         <th>Actions</th>
                     </tr>
                     <tr ng-repeat="message in DialogList.dialogModal.dialog.messages">
-                        <td><input type="text" value="{{message.id}}" readonly></td>
+                        <td>
+                            <input type="text" value="{{message.id}}" readonly>
+                        </td>
                         <td>{{message.character}}</td>
                         <td>{{message.text}}</td>
                         <td>
@@ -74,21 +78,21 @@
                             </a>
                         </td>
                         <td>
-                            <button class="btn btn-warning btn-sm" ng-click="DialogList.selectMessage(message)">
+                            <button class="btn btn-warning btn-sm" ng-click="DialogList.selectMessage(message)" title="Edit the current message">
                                 <i class="fa fa-pencil"></i>
                             </button>
-                            <button class="btn btn-warning btn-sm" ng-click="DialogList.duplicateMessage(message)">
+                            <button class="btn btn-warning btn-sm" ng-click="DialogList.duplicateMessage(message)" title="Duplicate the current message">
                                 <i class="fa fa-clone"></i>
                             </button>
                             </button>
-                            <button class="btn btn-default btn-sm" ng-click="DialogList.moveUpMessage(message)">
+                            <button class="btn btn-default btn-sm" ng-click="DialogList.moveUpMessage(message)" title="Move up the current message">
                                 <i class="fa fa-arrow-up"></i>
                             </button>
                             </button>
-                            <button class="btn btn-default btn-sm" ng-click="DialogList.moveDownMessage(message)">
+                            <button class="btn btn-default btn-sm" ng-click="DialogList.moveDownMessage(message)" title="Move down the current message">
                                 <i class="fa fa-arrow-down"></i>
                             </button>
-                            <button class="btn btn-danger btn-sm" ng-click="DialogList.removeMessage(message)">
+                            <button class="btn btn-danger btn-sm" ng-click="DialogList.removeMessage(message)" title="Remove the current message">
                                 <i class="fa fa-times"></i>
                             </button>
                         </td>
