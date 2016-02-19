@@ -299,14 +299,6 @@ app.Models.Message = (function () {
 })();
 
 
-(function () {
-    app.controller("ToolbarController", ToolbarController);
-    
-    function ToolbarController() {
-        var vm = this;
-       
-    }
-})();
 app.Utils.Guid = (function () {
     function Guid() { }
     
