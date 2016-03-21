@@ -1,9 +1,35 @@
 <div class="component">
+    <h2>Chapter</h2>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <button class="btn btn-primary btn-sm"><i class="fa fa-floppy-o"></i> Save everything</button>
+            <button class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> Clear everything</button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                Name : {{input value=dialog.name class="form-control"}}
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                Number : {{input value=dialog.number class="form-control"}}
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                Language (e.g. en,fr) : {{input value=dialog.language class="form-control"}}
+            </div>
+        </div>
+    </div>
     <h3>Dialogs</h3>
     <div class="row">
         <div class="col-sm-12">
             <div class="form-group">
-               {{#link-to "dialog.add" class="btn btn-default btn-sm"}}<i class="fa fa-plus"></i>{{/link-to}}
+                {{#link-to "dialog.add" class="btn btn-default btn-sm"}}<i class="fa fa-plus"></i>{{/link-to}}
             </div>
         </div>
     </div>

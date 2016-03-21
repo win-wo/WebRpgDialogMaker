@@ -5,5 +5,5 @@ export default DS.Model.extend({
   name: DS.attr(),
   number: DS.attr(),
   language: DS.attr(),
-  dialogs: DS.hasMany('dialog'),
+  dialogs: DS.attr(),
 });
