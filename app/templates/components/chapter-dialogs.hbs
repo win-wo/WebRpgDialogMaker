@@ -1,0 +1,42 @@
+<div class="component">
+    <h3>Dialogs</h3>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+               {{#link-to "dialog.add" class="btn btn-default btn-sm"}}<i class="fa fa-plus"></i>{{/link-to}}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-responsive">
+                <tr>
+                    <th>Key</th>
+                    <th>Actions</th>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btn-warning btn-sm" title="Edit the current dialog">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                        <button class="btn btn-warning btn-sm" title="Duplicate the current dialog">
+                            <i class="fa fa-copy"></i>
+                        </button>
+                        <button class="btn btn-default btn-sm" title="Move up the current dialog">
+                            <i class="fa fa-arrow-up"></i>
+                        </button>
+                        <button class="btn btn-default btn-sm" title="Move down the current dialog">
+                            <i class="fa fa-arrow-down"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" title="Remove the current dialog">
+                            <i class="fa fa-times"></i>
+                        </button>
+                        <button class="btn btn-success btn-sm" title="Run the current dialog in the demo viewer">
+                            <i class="fa fa-laptop"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

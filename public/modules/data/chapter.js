@@ -1,3 +1,0 @@
-app.Data.Chapter = {
-    
-}

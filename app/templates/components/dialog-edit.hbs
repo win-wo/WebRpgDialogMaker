@@ -1,0 +1,97 @@
+<div class="template">
+    <h2>New Dialog</h2>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                Name : {{input value=dialog.name class="form-control"}}
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                Number : {{input value=dialog.number class="form-control"}}
+            </div>
+        </div>
+    </div>
+    <h4>Messages</h4>
+    <hr>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                Character's' Name {{input value=message.characterName class="form-control"}}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="form-group">
+                Text {{textarea value=message.text class="form-control" rows="7"}}
+            </div>
+        </div>
+        <div class="col-sm-2 text-center">
+            <mark>OR</mark>
+        </div>
+        <div class="col-sm-5">
+            <div class="form-group">
+                Choices {{textarea value=message.choices class="form-control" rows="7"}}
+            </div>
+        </div>
+    </div>
+
+    <div class="component">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <button class="btn btn-default btn-sm pull-right" title="Add this message" {{action "addMessage"}}>
+                        <i class="fa fa-plus"></i> Add a message
+                    </button>
+                    <button class="btn btn-default btn-sm pull-right" title="Save this message" {{action "saveMessage"}}>
+                        <i class="fa fa-save"></i> Save the message
+                    </button>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-response">
+                    <tr>
+                        <th>Id</th>
+                        <th>Character</th>
+                        <th>Text</th>
+                        <th>Choices</th>
+                        <th>Actions</th>
+                    </tr>
+                    {{#each dialog.messages as |message|}}
+                    <tr>
+                        <td>{{message.id}}</td>
+                        <td>{{message.characterName}}</td>
+                        <td>{{message.text}}</td>
+                        <td>{{message.choices}}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" title="Edit the current message" {{action "editMessage" message}}>
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                            <button class="btn btn-warning btn-sm" title="Duplicate the current message" {{action "duplicateMessage" message}}>
+                                <i class="fa fa-clone"></i>
+                            </button>
+                            <button class="btn btn-default btn-sm" title="Move up the current message" {{action "moveUpMessage" message}}>
+                                <i class="fa fa-arrow-up"></i>
+                            </button>
+                            <button class="btn btn-default btn-sm" title="Move down the current message" {{action "moveDownMessage" message}}>
+                                <i class="fa fa-arrow-down"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" title="Remove the current message" {{action "removeMessage" message}}>
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {{link-to "Cancel" "index" class="btn btn-default"}}
+
+    <button type="button" class="btn btn-primary" {{action "saveDialog"}}>Save changes</button>
+</div>
