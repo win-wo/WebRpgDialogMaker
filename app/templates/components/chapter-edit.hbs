@@ -3,25 +3,25 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <button class="btn btn-primary btn-sm"><i class="fa fa-floppy-o"></i> Save everything</button>
-            <button class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> Clear everything</button>
+            <button class="btn btn-primary btn-sm" {{action "saveEverything"}}><i class="fa fa-floppy-o" ></i> Save everything</button>
+            <button class="btn btn-primary btn-sm" {{action "clearEverything"}}><i class="fa fa-refresh" ></i> Clear everything</button>
         </div>
     </div>
     <br>
     <div class="row">
         <div class="col-sm-3">
             <div class="form-group">
-                Name : {{input value=dialog.name class="form-control"}}
+                Chapter Name : {{input value=chapter.name class="form-control"}}
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
-                Number : {{input value=dialog.number class="form-control"}}
+                Chapter Number : {{input value=chapter.number class="form-control"}}
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
-                Language (e.g. en,fr) : {{input value=dialog.language class="form-control"}}
+                Chapter Language (e.g. en,fr) : {{input value=chapter.language class="form-control"}}
             </div>
         </div>
     </div>
