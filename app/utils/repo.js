@@ -1,19 +1,21 @@
 var Ember;
-var _;
 
 export default class Repo{
     constructor(items){
         this.items = items;
     }
-    save(entity) {
-        var index = this.getIndex(entity.id);
-
+    addOrUpdate(entity) {
+        var entityToSave = JSON.parse(JSON.stringify(entity));
+        
+        var index = this.getIndex(entityToSave.id);
         if (index !== -1) {
-            this.items[index] = entity;
+            this.items[index] = entityToSave;
         }
         else {
-            this.items.push(entity);
+            entityToSave.id = Repo.guid();
+            this.items.push(entityToSave);
         }
+        return entityToSave;
     }
     duplicate(entity) {
         var duplicateEntity = Ember.copy(entity);
@@ -23,6 +25,9 @@ export default class Repo{
     }
     remove(entity) {
         _.remove(this.items, { id: entity.id });
+    }
+    clear() {
+        this.items = [];
     }
     get(id) {
         return _.find(this.items, { id: id });

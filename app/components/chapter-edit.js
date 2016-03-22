@@ -1,19 +1,28 @@
 import Ember from 'ember';
-import Repo from "ay-ember/utils/repo";
+import App from "ay-ember/app";
 
 export default Ember.Component.extend({
-    store: Ember.inject.service(),
     chapter : {},
+    init(args){
+        var repo = App.Store.get("chapter");
+        if(repo.items.length > 0){
+            this.set("chapter", repo.items[0]);    
+        }
+        this._super(args);
+    },
     actions : {
         saveEverything(){
-            var store = this.get("store");
             var chapter = this.get("chapter");
-            chapter.id = chapter.id || Repo.guid();
+            chapter = App.Store.get("chapter").addOrUpdate(chapter);
             
-            localStorage.chapter = JSON.stringify(vm.chapterData.chapter);
+            App.Store.save("chapter");
+            this.set("chapter", chapter);
         },
         clearEverything(){
-            
+            var repo = App.Store.get("chapter");
+            repo.clear();
+            App.Store.save("chapter");
+            this.set("chapter", {});
         }
     }
 });
