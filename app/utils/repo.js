@@ -1,4 +1,4 @@
-var Ember;
+import Ember from "ember";
 
 export default class Repo{
     constructor(items){

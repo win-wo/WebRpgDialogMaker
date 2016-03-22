@@ -18,7 +18,7 @@ export default Ember.Component.extend({
             this.saveMessageInCurrentDialog(message);
         },
         editMessage(message) {
-            this.set("message", message);
+            this.set("message", Ember.copy(message));
             this.rerender();
         },
         duplicateMessage(message) {
@@ -60,7 +60,7 @@ export default Ember.Component.extend({
         var dialog = this.get("dialog");
 
         var messagesRepo = new Repo(dialog.messages);
-        messagesRepo.save(message);
+        messagesRepo.addOrUpdate(message);
 
         this.set("dialog", dialog);
         this.set("message", {});
