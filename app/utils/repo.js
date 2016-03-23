@@ -27,10 +27,16 @@ export default class Repo{
         _.remove(this.items, { id: entity.id });
     }
     clear() {
-        this.items = [];
+        this.items.length = 0;
     }
     get(id) {
         return _.find(this.items, { id: id });
+    }
+    first(){
+        if(this.items.length > 0){
+            return this.items[0];
+        }
+        return null;
     }
     getIndex(id) {
         return _.findIndex(this.items, { id: id });

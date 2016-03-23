@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import Repo from 'ay-ember/utils/repo';
+import App from 'ay-ember/app';
 
 export default Ember.Component.extend({
     dialog: {
@@ -7,13 +8,7 @@ export default Ember.Component.extend({
     },
     message: {},
     actions: {
-        addMessage() {
-            var message = this.get("message");
-            message.id = Repo.guid();
-
-            this.saveMessageInCurrentDialog(message);
-        },
-        saveMessage() {
+        addOrUpdateMessage() {
             var message = this.get("message");
             this.saveMessageInCurrentDialog(message);
         },
@@ -45,16 +40,20 @@ export default Ember.Component.extend({
             messagesRepo.remove(message);
             this.rerender();
         },
-        saveDialog() {
+        addOrUpdateDialog() {
+            debugger;
             var dialog = this.get("dialog");
+            var chapterRepo = App.Store.get("chapter");
+            var chapter = chapterRepo.first();
 
-            this.store.createdRecord("dialog", {
-                "id": Repo.guid(),
-                "name": dialog.name,
-                "number": dialog.number,
-                "messages": dialog.messages,
-            });
-        },
+            var dialogRepo = new Repo(chapter.dialogs);
+            
+            dialogRepo.addOrUpdate(dialog);
+            chapterRepo.addOrUpdate(chapter);
+            
+            App.Store.save("chapter");
+            this.transitionTo('index');
+        }
     },
     saveMessageInCurrentDialog(message) {
         var dialog = this.get("dialog");

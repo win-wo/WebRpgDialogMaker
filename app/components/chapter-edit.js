@@ -2,11 +2,13 @@ import Ember from 'ember';
 import App from "ay-ember/app";
 
 export default Ember.Component.extend({
-    chapter : {},
+    chapter : {
+        dialogs : []
+    },
     init(args){
-        var repo = App.Store.get("chapter");
-        if(repo.items.length > 0){
-            this.set("chapter", repo.items[0]);    
+        var chapter = App.Store.get("chapter").first();
+        if(chapter){
+            this.set("chapter", chapter);    
         }
         this._super(args);
     },
@@ -19,6 +21,7 @@ export default Ember.Component.extend({
             this.set("chapter", chapter);
         },
         clearEverything(){
+            debugger;
             var repo = App.Store.get("chapter");
             repo.clear();
             App.Store.save("chapter");

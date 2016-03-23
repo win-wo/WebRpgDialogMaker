@@ -42,11 +42,11 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     {{#if message.id}}
-                    <button class="btn btn-default btn-sm pull-right" title="Save this message" {{action "saveMessage"}}>
+                    <button class="btn btn-default btn-sm pull-right" title="Save this message" {{action "addOrUpdateMessage"}}>
                         <i class="fa fa-save"></i> Save the message
                     </button>
                     {{else}}
-                    <button class="btn btn-default btn-sm pull-right" title="Add this message" {{action "addMessage"}}>
+                    <button class="btn btn-default btn-sm pull-right" title="Add this message" {{action "addOrUpdateMessage"}}>
                         <i class="fa fa-plus"></i> Add a message
                     </button>
                     {{/if}}
@@ -96,5 +96,5 @@
 
     {{link-to "Cancel" "index" class="btn btn-default"}}
 
-    <button type="button" class="btn btn-primary" {{action "saveDialog"}}>Save changes</button>
+    <button type="button" class="btn btn-primary" {{action "addOrUpdateDialog"}}>Save changes</button>
 </div>
